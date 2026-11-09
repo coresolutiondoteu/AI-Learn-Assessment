@@ -2,6 +2,8 @@
 
 **Version:** 2.0 · **Build date:** 2026-11-08 · **Language:** English · **Format:** self-contained offline HTML app + companion PDFs + editable sources
 
+Download the app: https://github.com/coresolutiondoteu/AI-Learn-Assessment/archive/refs/heads/main.zip
+
 ## Run it
 
 1. Unzip the archive, preserving the `AI_Systems_Academy/` folder.
