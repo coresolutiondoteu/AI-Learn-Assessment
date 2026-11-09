@@ -1,0 +1,101 @@
+[
+  {
+    "id": "A",
+    "title": "Grounded evidence assistant",
+    "level": "Builder → Engineer",
+    "brief": "Build a document QA assistant over 30 versioned, synthetic documents, with access-aware retrieval and supported citations.",
+    "build": [
+      "Version and chunk an explicit corpus with document IDs, timestamps and ACL tags.",
+      "Implement lexical and/or semantic retrieval and bounded response generation.",
+      "Verify each cited sentence against the retrieved source span."
+    ],
+    "tests": [
+      "Old vs current conflicting policy",
+      "Missing and ambiguous evidence",
+      "Unauthorized document request",
+      "Injection attempt in a retrieved passage",
+      "Source citation absent or mismatched"
+    ],
+    "gate": "All restricted-source requests denied; citation support is measured on a fixed test set; provenance and rollback documented.",
+    "modules": [
+      "rag",
+      "context",
+      "eval"
+    ]
+  },
+  {
+    "id": "B",
+    "title": "Read-only infrastructure assistant",
+    "level": "Engineer",
+    "brief": "Design a narrow status/troubleshooting assistant that can inspect a simulated service inventory without executing writes.",
+    "build": [
+      "Specify read-only get_service_status and get_recent_log tools.",
+      "Enforce principal-specific service allowlists and resource-level auth.",
+      "Use a bounded investigation loop and record complete tool/policy traces."
+    ],
+    "tests": [
+      "Prompt injection in a log line",
+      "Corrupted tool output",
+      "Server unavailable and timeout",
+      "Unknown resource identifier",
+      "Attempted forbidden mutation",
+      "Replayed request after network ambiguity"
+    ],
+    "gate": "No write capability without separate approval; validated tool schemas, bounded recovery and explicit missing-evidence fallback.",
+    "modules": [
+      "tools",
+      "harness",
+      "eval"
+    ]
+  },
+  {
+    "id": "C",
+    "title": "Evaluation-driven coding harness",
+    "level": "Engineer → Specialist",
+    "brief": "Use an isolated sandbox to propose a small patch, run a predefined test suite, and prepare a human-reviewed diff; never auto-merge.",
+    "build": [
+      "Scope a disposable repository workspace and file access.",
+      "Provide read, search, patch and test tools with explicit command allowlists.",
+      "Record diffs, test exit codes and decision traces for replay."
+    ],
+    "tests": [
+      "Seeded failing tests",
+      "Adversarial README instructions",
+      "Intermittently failing tests",
+      "Unavailable dependencies",
+      "Out-of-scope file changes",
+      "Failed and partial patch application"
+    ],
+    "gate": "Reproducible evaluation, no unauthorized scope changes, explained recovery paths and reviewable final patch.",
+    "modules": [
+      "harness",
+      "tools",
+      "eval"
+    ]
+  },
+  {
+    "id": "D",
+    "title": "Inference and agent SLO lab",
+    "level": "Specialist",
+    "brief": "Benchmark two local serving configurations under varied input lengths and concurrency; connect performance to one fixed agent workload.",
+    "build": [
+      "Capture hardware, driver, runtime, weights, tokenizer and template fingerprint.",
+      "Instrument TTFT, decode throughput, p50/p95 end-to-end latency and memory.",
+      "Compare serving configurations with unchanged workload and acceptance tests."
+    ],
+    "tests": [
+      "Short and long prompts",
+      "Concurrency at 1, 4 and 8",
+      "Cold vs warm prefix cache",
+      "Resource exhaustion and recovery",
+      "Quantized vs non-quantized if supported",
+      "Quality regression despite speedup"
+    ],
+    "gate": "Versioned benchmark report, p50/p95 charts, quality and memory trade-offs, risk review and verified rollback.",
+    "modules": [
+      "inference",
+      "local",
+      "production"
+    ]
+  }
+]

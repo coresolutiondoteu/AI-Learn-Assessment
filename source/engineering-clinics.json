@@ -1,0 +1,978 @@
+[
+  {
+    "id": "stack",
+    "title": "The green UI, the denied tool",
+    "story": "A team reports that its coding assistant “worked.” The UI displayed success, but the execution trace records a failed write under a restricted identity.",
+    "objective": "Distinguish interaction, control, tool execution and independent evidence.",
+    "evidence": [
+      [
+        "Signal",
+        "Observed",
+        "Implication"
+      ],
+      [
+        "UI result",
+        "Success text",
+        "A claim, not a side-effect receipt"
+      ],
+      [
+        "Tool action",
+        "WRITE /etc/service.conf",
+        "Privileged target"
+      ],
+      [
+        "Executor",
+        "DENIED: scope mismatch",
+        "Trusted control remained effective"
+      ]
+    ],
+    "constraints": [
+      "Do not alter the model or broaden privileges just to make the UI match.",
+      "The report must identify exactly what ran and what was denied."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Establish observed state",
+        "question": "Which statement can be proven from these traces?",
+        "options": [
+          "The model proposed or reported success, but the actual write was denied.",
+          "The service configuration was updated successfully.",
+          "The GPU refused to execute the requested tokens.",
+          "The UI text automatically overrode the OS denial."
+        ],
+        "answer": "The model proposed or reported success, but the actual write was denied.",
+        "explanation": "Use execution receipts to establish side effects, not generated prose.",
+        "distractor_notes": {
+          "The service configuration was updated successfully.": "There is explicit denial evidence.",
+          "The GPU refused to execute the requested tokens.": "Device kernels are not tool authorization.",
+          "The UI text automatically overrode the OS denial.": "A display has no override authority."
+        },
+        "insight": "Write “observed” and “inferred” in different columns."
+      },
+      {
+        "stage": "2 · Locate responsibility",
+        "question": "Where should the permission to write the protected file be enforced?",
+        "options": [
+          "At the authenticated tool executor, tied to exact resource/action scope.",
+          "In the chatbot prose before it generates an answer.",
+          "In the terminal theme and button state.",
+          "By requiring the model to include a yes/no field in output."
+        ],
+        "answer": "At the authenticated tool executor, tied to exact resource/action scope.",
+        "explanation": "The executor owns side effects and must independently check authority.",
+        "distractor_notes": {
+          "In the chatbot prose before it generates an answer.": "Prompt instructions are advisory.",
+          "In the terminal theme and button state.": "UI flags can be bypassed.",
+          "By requiring the model to include a yes/no field in output.": "Generated JSON is not a grant."
+        },
+        "insight": "Separate tool discovery, request validation and execution."
+      },
+      {
+        "stage": "3 · Design the acceptance test",
+        "question": "What proves that this incident cannot silently mutate a forbidden path?",
+        "options": [
+          "Replay a hostile tool proposal; verify denial, unchanged file content and a redacted audit event.",
+          "Ask the model to promise to follow the policy.",
+          "Inspect only the final chat response.",
+          "Keep the privileged tool but hide it from the navigation."
+        ],
+        "answer": "Replay a hostile tool proposal; verify denial, unchanged file content and a redacted audit event.",
+        "explanation": "Negative tests need observed denial and unchanged authoritative state.",
+        "distractor_notes": {
+          "Ask the model to promise to follow the policy.": "Promises are not execution proof.",
+          "Inspect only the final chat response.": "Final text does not show file mutations.",
+          "Keep the privileged tool but hide it from the navigation.": "UI hiding does not restrict API calls."
+        },
+        "insight": "Include this denial test in the release suite."
+      }
+    ],
+    "proof": "Evidence pack: effective identity, tool arguments, denial receipt, unchanged target hash and trace ID.",
+    "connections": [
+      "eval",
+      "harness",
+      "tools"
+    ]
+  },
+  {
+    "id": "models",
+    "title": "A template change disguised as a model failure",
+    "story": "A new model family loads correctly, but some assistant messages expose literal role markers and structured tool calls no longer parse.",
+    "objective": "Identify representation compatibility before blaming weights or compute.",
+    "evidence": [
+      [
+        "Signal",
+        "Prior",
+        "After"
+      ],
+      [
+        "Model load",
+        "PASS",
+        "PASS"
+      ],
+      [
+        "Role parsing",
+        "99.8%",
+        "82%"
+      ],
+      [
+        "Template digest",
+        "A",
+        "B"
+      ],
+      [
+        "GPU availability",
+        "PASS",
+        "PASS"
+      ]
+    ],
+    "constraints": [
+      "No retraining budget.",
+      "Preserve the ability to roll back to the known-good serialization."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Read the evidence",
+        "question": "Which regression is most closely aligned with the observed change?",
+        "options": [
+          "Chat template/role serialization compatibility.",
+          "GPU driver performance under load.",
+          "RAG index ranking quality.",
+          "A missing training checkpoint in the model weights."
+        ],
+        "answer": "Chat template/role serialization compatibility.",
+        "explanation": "Role markers failing after a template change suggest serialization mismatch.",
+        "distractor_notes": {
+          "GPU driver performance under load.": "GPU is available and tool marker parsing is semantic.",
+          "RAG index ranking quality.": "Retrieval is not in the incident path.",
+          "A missing training checkpoint in the model weights.": "Inference weights still load."
+        },
+        "insight": "Changes in one layer may be misreported as defects in another."
+      },
+      {
+        "stage": "2 · Plan a controlled comparison",
+        "question": "Which controlled test isolates the suspected cause?",
+        "options": [
+          "Replay identical input/tool fixtures with template A and B while keeping weights and backend fixed.",
+          "Upgrade weights, template and driver simultaneously.",
+          "Compare only output fluency on one open-ended question.",
+          "Change top-p until markers look correct."
+        ],
+        "answer": "Replay identical input/tool fixtures with template A and B while keeping weights and backend fixed.",
+        "explanation": "One-variable comparisons plus exact serialized traces enable attribution.",
+        "distractor_notes": {
+          "Upgrade weights, template and driver simultaneously.": "Confounded changes prevent attribution.",
+          "Compare only output fluency on one open-ended question.": "Fluency does not measure tool parsing.",
+          "Change top-p until markers look correct.": "Sampling tuning cannot repair a format mismatch."
+        },
+        "insight": "Track role markers and stopping tokens explicitly."
+      },
+      {
+        "stage": "3 · Make the release decision",
+        "question": "What is a justified acceptance gate?",
+        "options": [
+          "Tool/role parsing plus end-to-end task outcomes meet baseline with tested rollback.",
+          "The weights load, therefore the release is ready.",
+          "The UI looks unchanged.",
+          "The first generated sentence is grammatically correct."
+        ],
+        "answer": "Tool/role parsing plus end-to-end task outcomes meet baseline with tested rollback.",
+        "explanation": "Loading and rendering are necessary but not sufficient for contractual compatibility.",
+        "distractor_notes": {
+          "The weights load, therefore the release is ready.": "Load success omits behavior.",
+          "The UI looks unchanged.": "UI cannot establish serialization correctness.",
+          "The first generated sentence is grammatically correct.": "Grammar does not prove tool calls."
+        },
+        "insight": "Version the tokenizer, chat template and weights independently."
+      }
+    ],
+    "proof": "Evidence pack: serialized messages, tokenizer/template IDs, parsing scores, canary test and rollback procedure.",
+    "connections": [
+      "stack",
+      "context",
+      "local"
+    ]
+  },
+  {
+    "id": "inference",
+    "title": "The 7B model that fits until real users arrive",
+    "story": "A local inference team sizes a model by its weight file only. A long-context deployment becomes unavailable when eight users connect.",
+    "objective": "Estimate KV memory, then translate the capacity model into an admission plan.",
+    "evidence": [
+      [
+        "Parameter",
+        "Baseline",
+        "Target"
+      ],
+      [
+        "Weights",
+        "7B at ideal 4-bit ≈3.5 GB",
+        "Same"
+      ],
+      [
+        "KV cache",
+        "448 MiB at 4K × 1",
+        "16K × 8 users"
+      ],
+      [
+        "KV precision",
+        "FP16",
+        "FP16"
+      ],
+      [
+        "Serving overhead",
+        "Not included",
+        "Not included"
+      ]
+    ],
+    "constraints": [
+      "Hypothetical 28 layers, 8 KV heads, head dim 128.",
+      "Do not treat an illustrative formula as a real-model measurement."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Compute pressure",
+        "question": "Using the supplied baseline, approximately how much KV is required for the target?",
+        "options": [
+          "About 14 GiB: 448 MiB × 4 context × 8 sequences.",
+          "448 MiB because all users share one cache.",
+          "3.5 GB because KV cannot exceed model weights.",
+          "About 1.75 GiB because concurrency has no memory cost."
+        ],
+        "answer": "About 14 GiB: 448 MiB × 4 context × 8 sequences.",
+        "explanation": "For fixed KV precision/geometry, memory scales roughly with context tokens and sequences.",
+        "distractor_notes": {
+          "448 MiB because all users share one cache.": "Attention state differs per sequence.",
+          "3.5 GB because KV cannot exceed model weights.": "Weights and KV are separate allocations.",
+          "About 1.75 GiB because concurrency has no memory cost.": "1.75 GiB represents one 16K sequence."
+        },
+        "insight": "Calculate before changing max-concurrent settings."
+      },
+      {
+        "stage": "2 · Interpret a slowdown",
+        "question": "After enabling continuous batching, throughput rises but interactive p95 doubles. What can be concluded?",
+        "options": [
+          "Capacity and tail responsiveness improved in different directions; both require separate acceptance tests.",
+          "Higher aggregate throughput guarantees every request is faster.",
+          "The model grew more parameters from batching.",
+          "A p95 regression proves tokenizer corruption."
+        ],
+        "answer": "Capacity and tail responsiveness improved in different directions; both require separate acceptance tests.",
+        "explanation": "Throughput does not imply per-user latency improvement.",
+        "distractor_notes": {
+          "Higher aggregate throughput guarantees every request is faster.": "Scheduling may increase waiting time.",
+          "The model grew more parameters from batching.": "Schedulers do not change weights.",
+          "A p95 regression proves tokenizer corruption.": "Tokenizer corruption needs other evidence."
+        },
+        "insight": "Slice latency by prompt length and concurrency."
+      },
+      {
+        "stage": "3 · Decide architecture",
+        "question": "Which deployment action is defensible before buying hardware?",
+        "options": [
+          "Benchmark target load; cap context/concurrency or cache geometry with quality and SLO gates.",
+          "Assume 4-bit weights solve all memory issues.",
+          "Disable OOM telemetry so dashboards remain green.",
+          "Allow unlimited clients because paging always makes memory free."
+        ],
+        "answer": "Benchmark target load; cap context/concurrency or cache geometry with quality and SLO gates.",
+        "explanation": "Control admission using measured memory and latency budgets.",
+        "distractor_notes": {
+          "Assume 4-bit weights solve all memory issues.": "KV may dominate.",
+          "Disable OOM telemetry so dashboards remain green.": "Hidden failure is still failure.",
+          "Allow unlimited clients because paging always makes memory free.": "Paging/offload may hurt SLO or be unavailable."
+        },
+        "insight": "Keep a quantified peak-memory margin and recovery behavior."
+      }
+    ],
+    "proof": "Evidence pack: KV geometry sheet, 1/4/8-client load test, TTFT, p95, GPU peak, OOM scenario.",
+    "connections": [
+      "local",
+      "production",
+      "models"
+    ]
+  },
+  {
+    "id": "local",
+    "title": "The endpoint responds; the application fails",
+    "story": "A team switches a local inference engine behind an “OpenAI-compatible” endpoint. The dashboard returns healthy while structured tool calls break.",
+    "objective": "Separate process liveness, model readiness and complete API behavior.",
+    "evidence": [
+      [
+        "Metric",
+        "Before",
+        "After"
+      ],
+      [
+        "/health",
+        "200",
+        "200"
+      ],
+      [
+        "Model ready",
+        "PASS",
+        "PASS"
+      ],
+      [
+        "Tool-call parse",
+        "99%",
+        "85%"
+      ],
+      [
+        "p95",
+        "3.8 s",
+        "2.6 s"
+      ]
+    ],
+    "constraints": [
+      "Keep the known-good backend available.",
+      "Do not assume faster response is an acceptable substitute for correct tools."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Classify the regression",
+        "question": "What is currently disproven?",
+        "options": [
+          "That a healthy HTTP listener guarantees the application-level tool contract.",
+          "That the server responds to any request.",
+          "That latency improved in the measured sample.",
+          "That an HTTP endpoint can present health status."
+        ],
+        "answer": "That a healthy HTTP listener guarantees the application-level tool contract.",
+        "explanation": "Liveness and API tool semantics are distinct checks.",
+        "distractor_notes": {
+          "That the server responds to any request.": "Health is returning successfully.",
+          "That latency improved in the measured sample.": "p95 was measured lower.",
+          "That an HTTP endpoint can present health status.": "A 200 response proves the listener exists."
+        },
+        "insight": "Trace one exact tool call from serialized input to consumer parser."
+      },
+      {
+        "stage": "2 · Select evidence",
+        "question": "Which test should be prioritized?",
+        "options": [
+          "Freeze task fixtures and compare streaming fragments, tool schemas and semantic results across engines.",
+          "Compare model file sizes only.",
+          "Change the frontend layout and retest.",
+          "Increase context for every request without checking stream events."
+        ],
+        "answer": "Freeze task fixtures and compare streaming fragments, tool schemas and semantic results across engines.",
+        "explanation": "Feature-level compatibility must be measured on behavior users consume.",
+        "distractor_notes": {
+          "Compare model file sizes only.": "Size says nothing about API semantics.",
+          "Change the frontend layout and retest.": "Presentation is not this fault.",
+          "Increase context for every request without checking stream events.": "More context does not repair event parsing."
+        },
+        "insight": "Pin both model and engine revisions in a reproducibility manifest."
+      },
+      {
+        "stage": "3 · Make the release gate",
+        "question": "What do the measured results justify?",
+        "options": [
+          "Hold rollout until tool parsing meets required threshold, while preserving the measured latency benefit as a candidate.",
+          "Roll forward because p95 dropped by 1.2 seconds.",
+          "Delete tool validation from the client.",
+          "Relabel the endpoint as fully compatible without evidence."
+        ],
+        "answer": "Hold rollout until tool parsing meets required threshold, while preserving the measured latency benefit as a candidate.",
+        "explanation": "Independent hard criteria must pass before release.",
+        "distractor_notes": {
+          "Roll forward because p95 dropped by 1.2 seconds.": "Latency gains cannot compensate for broken core behavior.",
+          "Delete tool validation from the client.": "Validation removal conceals errors.",
+          "Relabel the endpoint as fully compatible without evidence.": "Protocol labels are not acceptance evidence."
+        },
+        "insight": "Report capability differences rather than just benchmark averages."
+      }
+    ],
+    "proof": "Evidence pack: health/readiness probes, streaming contract fixtures, schema/semantic accuracy, rollback digests.",
+    "connections": [
+      "context",
+      "inference",
+      "eval"
+    ]
+  },
+  {
+    "id": "context",
+    "title": "The decision lost during compaction",
+    "story": "A coding agent makes a correct read-only plan, then a long transcript is compacted. An earlier “never mutate production” constraint disappears; the next tool proposal requests a write.",
+    "objective": "Design context compaction without making the model transcript the source of truth.",
+    "evidence": [
+      [
+        "Record",
+        "Before compaction",
+        "After"
+      ],
+      [
+        "Production write policy",
+        "Prohibited",
+        "Missing from summary"
+      ],
+      [
+        "Prompt length",
+        "29K",
+        "6K"
+      ],
+      [
+        "Tool proposal",
+        "Read-only",
+        "Write requested"
+      ]
+    ],
+    "constraints": [
+      "The task still needs efficient context.",
+      "Trustworthy approvals must survive restart and compaction."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Locate the failure",
+        "question": "Which statement is best supported?",
+        "options": [
+          "A material constraint was lost from context; the executor must still independently prohibit the write.",
+          "The model weights forgot the policy and need retraining.",
+          "Lower token count automatically proves improved safety.",
+          "Any missing summary detail automatically grants permission."
+        ],
+        "answer": "A material constraint was lost from context; the executor must still independently prohibit the write.",
+        "explanation": "Compaction is lossy, and authority must not live only in text.",
+        "distractor_notes": {
+          "The model weights forgot the policy and need retraining.": "Weights were not modified.",
+          "Lower token count automatically proves improved safety.": "Smaller is not necessarily safer.",
+          "Any missing summary detail automatically grants permission.": "Omission is not consent."
+        },
+        "insight": "Compare the compiled prompt with a durable decision ledger."
+      },
+      {
+        "stage": "2 · Decide what persists",
+        "question": "What state must remain authoritative outside the prompt?",
+        "options": [
+          "Task constraints, approvals, resource scope, accepted results and replayable side-effect receipts.",
+          "Only a short model-written summary of the last chat turn.",
+          "Only GPU prefill telemetry.",
+          "Only the most recent user emoji and assistant greeting."
+        ],
+        "answer": "Task constraints, approvals, resource scope, accepted results and replayable side-effect receipts.",
+        "explanation": "Structured state is required for continuity and safe recovery.",
+        "distractor_notes": {
+          "Only a short model-written summary of the last chat turn.": "Summaries can drop critical conditions.",
+          "Only GPU prefill telemetry.": "Telemetry does not express intent and permission.",
+          "Only the most recent user emoji and assistant greeting.": "Conversation style does not define contracts."
+        },
+        "insight": "Link authoritative state entries to original evidence IDs."
+      },
+      {
+        "stage": "3 · Set an acceptance gate",
+        "question": "Which negative test best validates the repair?",
+        "options": [
+          "Force compaction before a privileged proposal, then verify executor denial and preserved constraint provenance.",
+          "Ask the model to summarize more confidently.",
+          "Run only short contexts where the bug never occurs.",
+          "Increase output token limit without a state check."
+        ],
+        "answer": "Force compaction before a privileged proposal, then verify executor denial and preserved constraint provenance.",
+        "explanation": "Test the actual failure boundary under the conditions that triggered it.",
+        "distractor_notes": {
+          "Ask the model to summarize more confidently.": "Confidence does not preserve policy.",
+          "Run only short contexts where the bug never occurs.": "Avoiding long contexts hides the bug.",
+          "Increase output token limit without a state check.": "Completion budget does not create durable authorization."
+        },
+        "insight": "Track source IDs, decision revisions and effective tool authority in traces."
+      }
+    ],
+    "proof": "Evidence pack: source constraints, context manifests before/after, tool-denial trace and state-resume test.",
+    "connections": [
+      "harness",
+      "rag",
+      "eval"
+    ]
+  },
+  {
+    "id": "harness",
+    "title": "The retry that created two resources",
+    "story": "A durable automation creates a VM. Its API succeeds but the response is lost. The worker crashes before recording completion and repeats the create on restart.",
+    "objective": "Make retry behavior safe when network success and local knowledge diverge.",
+    "evidence": [
+      [
+        "Signal",
+        "Observed",
+        "Meaning"
+      ],
+      [
+        "Create API",
+        "Success at target",
+        "Resource exists"
+      ],
+      [
+        "Local receipt",
+        "Missing",
+        "Ambiguous local state"
+      ],
+      [
+        "Restart action",
+        "Second create",
+        "Duplicate side effect"
+      ]
+    ],
+    "constraints": [
+      "The workflow must be resumable after arbitrary crashes.",
+      "Resource ownership must be provable."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Recognize the ambiguity",
+        "question": "What does a client timeout prove?",
+        "options": [
+          "The caller lacks a confirmed response; it does not establish whether the target committed.",
+          "The create API definitely rolled back.",
+          "The request definitely failed before reaching the server.",
+          "The model should choose success when it is confident."
+        ],
+        "answer": "The caller lacks a confirmed response; it does not establish whether the target committed.",
+        "explanation": "Transport outcome and external commit state are separate facts.",
+        "distractor_notes": {
+          "The create API definitely rolled back.": "Successful remote state can be lost to the client.",
+          "The request definitely failed before reaching the server.": "Delivery may have occurred before timeout.",
+          "The model should choose success when it is confident.": "Confidence cannot prove resource state."
+        },
+        "insight": "Preserve stable operation IDs and check target inventory."
+      },
+      {
+        "stage": "2 · Design the state machine",
+        "question": "Which sequence supports safe restart?",
+        "options": [
+          "Record intent and operation ID, execute once, reconcile target state, persist receipt, then resume dependent steps.",
+          "Create repeatedly until at least one success message appears.",
+          "Record “done” before checking the target result.",
+          "Rebuild from conversational history only, without target checks."
+        ],
+        "answer": "Record intent and operation ID, execute once, reconcile target state, persist receipt, then resume dependent steps.",
+        "explanation": "Durable receipts and idempotent external actions make continuation reliable.",
+        "distractor_notes": {
+          "Create repeatedly until at least one success message appears.": "Duplicates become likely.",
+          "Record “done” before checking the target result.": "Optimistic state can lie.",
+          "Rebuild from conversational history only, without target checks.": "Generated text is not authoritative."
+        },
+        "insight": "Model failures at every transaction boundary."
+      },
+      {
+        "stage": "3 · Define proof",
+        "question": "Which test demonstrates useful resilience?",
+        "options": [
+          "Inject a crash after remote success; restart and verify exactly one target resource exists with a complete ledger.",
+          "Run once under ideal networking and count no errors.",
+          "Have the model say the retry logic is safe.",
+          "Confirm that the UI loading animation finishes."
+        ],
+        "answer": "Inject a crash after remote success; restart and verify exactly one target resource exists with a complete ledger.",
+        "explanation": "A replay test after ambiguous success exercises the true failure surface.",
+        "distractor_notes": {
+          "Run once under ideal networking and count no errors.": "Happy path misses duplicate risk.",
+          "Have the model say the retry logic is safe.": "Self-certification is not a test.",
+          "Confirm that the UI loading animation finishes.": "UI progress is not external state."
+        },
+        "insight": "Use resource ownership labels and idempotency keys where supported."
+      }
+    ],
+    "proof": "Evidence pack: operation IDs, before/after target inventory, state transitions, crash-injection test.",
+    "connections": [
+      "production",
+      "tools",
+      "eval"
+    ]
+  },
+  {
+    "id": "tools",
+    "title": "48 tools, lower success",
+    "story": "An agent’s catalog grows from 8 to 48 tools. Task success and selection accuracy fall while API execution reliability remains unchanged.",
+    "objective": "Diagnose tool ambiguity from measured evidence, then enforce a safe discovery architecture.",
+    "evidence": [
+      [
+        "Metric",
+        "8 tools",
+        "48 tools"
+      ],
+      [
+        "Task success",
+        "94%",
+        "76%"
+      ],
+      [
+        "Correct tool selection",
+        "97%",
+        "79%"
+      ],
+      [
+        "Tool execution success",
+        "99%",
+        "99%"
+      ],
+      [
+        "Input tokens",
+        "3,200",
+        "8,900"
+      ],
+      [
+        "Context truncated",
+        "0%",
+        "0%"
+      ]
+    ],
+    "constraints": [
+      "All business functionality must remain available.",
+      "The model cannot be replaced in this iteration.",
+      "No user may acquire a capability they are not authorized to use."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Diagnose the symptom",
+        "question": "Which variable is most implicated by the table?",
+        "options": [
+          "Selecting the appropriate tool from a larger overlapping catalog.",
+          "A new context truncation error.",
+          "A measured decrease in API execution reliability.",
+          "The complete disappearance of the model’s tool-call capability."
+        ],
+        "answer": "Selecting the appropriate tool from a larger overlapping catalog.",
+        "explanation": "Selection accuracy fell while execution stayed 99% and no truncation was observed.",
+        "distractor_notes": {
+          "A new context truncation error.": "Truncation was 0%.",
+          "A measured decrease in API execution reliability.": "API success stayed 99%.",
+          "The complete disappearance of the model’s tool-call capability.": "Tool calls still occur."
+        },
+        "insight": "Do not infer unique causality without a controlled tool-subset A/B test."
+      },
+      {
+        "stage": "2 · Choose the diagnostic experiment",
+        "question": "Which experiment isolates catalog complexity with least confounding?",
+        "options": [
+          "Keep model/tasks fixed and compare full tool visibility with task-specific subsets; inspect selection and outcomes.",
+          "Change the model, descriptions and test set simultaneously.",
+          "Increase context and treat faster results as evidence of correctness.",
+          "Measure only per-endpoint API latency."
+        ],
+        "answer": "Keep model/tasks fixed and compare full tool visibility with task-specific subsets; inspect selection and outcomes.",
+        "explanation": "A controlled catalog A/B test targets selection quality, not unrelated factors.",
+        "distractor_notes": {
+          "Change the model, descriptions and test set simultaneously.": "Confounded variables defeat attribution.",
+          "Increase context and treat faster results as evidence of correctness.": "Latency alone does not measure selection.",
+          "Measure only per-endpoint API latency.": "Endpoint speed cannot explain observed selection regressions."
+        },
+        "insight": "Report both selection errors and task success for each subset."
+      },
+      {
+        "stage": "3 · Choose an architecture",
+        "question": "What change can preserve all tools and reduce selection ambiguity without violating authorization?",
+        "options": [
+          "Task-aware capability discovery, minimal exposed sets, and independent per-call policy checks.",
+          "Expose all tools with longer descriptions in every request.",
+          "Execute all candidate mutating tools concurrently and select the best result.",
+          "Let the model assign itself permissions during discovery."
+        ],
+        "answer": "Task-aware capability discovery, minimal exposed sets, and independent per-call policy checks.",
+        "explanation": "Discovery targets relevance; authorization still determines whether a specific tool may run.",
+        "distractor_notes": {
+          "Expose all tools with longer descriptions in every request.": "More tokens may not cure semantic overlap.",
+          "Execute all candidate mutating tools concurrently and select the best result.": "Parallel mutations increase side effects.",
+          "Let the model assign itself permissions during discovery.": "A model cannot grant resource authority."
+        },
+        "insight": "Build cross-user denial tests for discovery and execution independently."
+      }
+    ],
+    "proof": "Evidence pack: frozen task set, confusion matrix of selected tools, timing/token breakdown and authorization denials.",
+    "connections": [
+      "harness",
+      "eval",
+      "context"
+    ]
+  },
+  {
+    "id": "rag",
+    "title": "The retrieved policy from the wrong tenant",
+    "story": "A policy assistant answers a public customer question using an internal staff document. Filtering occurs after retrieval has passed snippets into the model.",
+    "objective": "Analyze grounding quality and data authorization as separate axes.",
+    "evidence": [
+      [
+        "Signal",
+        "Observed",
+        "Question"
+      ],
+      [
+        "Retrieval recall@5",
+        "94%",
+        "Is evidence present?"
+      ],
+      [
+        "Citation support",
+        "91%",
+        "Is each claim supported?"
+      ],
+      [
+        "Cross-tenant snippet in context",
+        "YES",
+        "Was access permitted?"
+      ]
+    ],
+    "constraints": [
+      "Private passages must never enter an unauthorized user’s model context.",
+      "The assistant should still answer public-policy queries."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Separate metrics",
+        "question": "Which result blocks release regardless of recall and citation scores?",
+        "options": [
+          "An unauthorized source entered the prompt context.",
+          "Retrieval recall is below a hypothetical 100% target.",
+          "The answer was syntactically valid JSON.",
+          "The returned snippet had a plausible title."
+        ],
+        "answer": "An unauthorized source entered the prompt context.",
+        "explanation": "Access control is a hard boundary independent of search relevance.",
+        "distractor_notes": {
+          "Retrieval recall is below a hypothetical 100% target.": "Recall can be imperfect without breaching confidentiality.",
+          "The answer was syntactically valid JSON.": "Syntax is not authority.",
+          "The returned snippet had a plausible title.": "Titles do not imply permission."
+        },
+        "insight": "Trace document ACL from ingest through candidate selection."
+      },
+      {
+        "stage": "2 · Fix the pipeline",
+        "question": "Where must permission filtering occur?",
+        "options": [
+          "Before protected documents are exposed to generation, including lexical/vector/rerank paths.",
+          "Only after the final answer is rendered.",
+          "Only in the browser user interface.",
+          "Only when a model voluntarily asks for permission."
+        ],
+        "answer": "Before protected documents are exposed to generation, including lexical/vector/rerank paths.",
+        "explanation": "Once private material enters context, post-processing cannot undo the exposure.",
+        "distractor_notes": {
+          "Only after the final answer is rendered.": "Final filtering is too late.",
+          "Only in the browser user interface.": "Hiding output does not secure input.",
+          "Only when a model voluntarily asks for permission.": "Models do not own data entitlements."
+        },
+        "insight": "Test unauthorized retrieval at every search path, not only final text."
+      },
+      {
+        "stage": "3 · Improve quality",
+        "question": "After fixing access, which evaluation verifies both usefulness and safety?",
+        "options": [
+          "Authorized recall, claim-level citation support, abstention and cross-tenant negative tests.",
+          "Only average semantic similarity to source chunks.",
+          "Only that the model replies confidently.",
+          "Only a browser screenshot of the policy text."
+        ],
+        "answer": "Authorized recall, claim-level citation support, abstention and cross-tenant negative tests.",
+        "explanation": "Quality and confidentiality must be measured independently.",
+        "distractor_notes": {
+          "Only average semantic similarity to source chunks.": "Similarity alone does not prove relevance or permission.",
+          "Only that the model replies confidently.": "Confidence is not evidence.",
+          "Only a browser screenshot of the policy text.": "Screenshots cannot inspect data paths."
+        },
+        "insight": "Include old-policy and conflicting-source cases for freshness/authority."
+      }
+    ],
+    "proof": "Evidence pack: document ACLs, permitted candidate IDs, cited claim spans and failed/denied retrieval traces.",
+    "connections": [
+      "context",
+      "eval",
+      "tools"
+    ]
+  },
+  {
+    "id": "eval",
+    "title": "The green dashboard that hid a failure",
+    "story": "A release looks excellent by average task score. A new version improves most answers but begins requesting forbidden actions.",
+    "objective": "Judge upgrades with independent quality, operational and safety gates.",
+    "evidence": [
+      [
+        "Metric",
+        "Baseline",
+        "Candidate"
+      ],
+      [
+        "Task success",
+        "86%",
+        "90%"
+      ],
+      [
+        "Unauthorized actions",
+        "0",
+        "3 / 500"
+      ],
+      [
+        "p95 response",
+        "3.7 s",
+        "3.2 s"
+      ],
+      [
+        "Security gate",
+        "0 actions",
+        "0 actions"
+      ]
+    ],
+    "constraints": [
+      "The forbidden-action gate is mandatory.",
+      "A passing suite is conditional evidence, not a guarantee of zero risk."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Read the scorecard",
+        "question": "Which metric most directly blocks release?",
+        "options": [
+          "Three unauthorized actions against a zero-action policy gate.",
+          "A four-point improvement in answer success.",
+          "Lower tail latency under the same load.",
+          "The number of evaluation questions being finite."
+        ],
+        "answer": "Three unauthorized actions against a zero-action policy gate.",
+        "explanation": "Safety gates must not be traded against answer quality.",
+        "distractor_notes": {
+          "A four-point improvement in answer success.": "Improvement does not erase policy failures.",
+          "Lower tail latency under the same load.": "Latency improvement is desirable.",
+          "The number of evaluation questions being finite.": "Finite tests affect certainty, but the observed violations are concrete."
+        },
+        "insight": "Report the violating trajectories, not just the aggregate count."
+      },
+      {
+        "stage": "2 · Diagnose safely",
+        "question": "Which evidence should be preserved for each unsafe case?",
+        "options": [
+          "Input source, model/context version, proposed arguments, authorizer verdict, side effect and redacted trace.",
+          "Only the final answer text.",
+          "Only the GPU temperature during inference.",
+          "Only the percentage of correct ordinary FAQs."
+        ],
+        "answer": "Input source, model/context version, proposed arguments, authorizer verdict, side effect and redacted trace.",
+        "explanation": "Trajectory replay reveals whether the failure lies in proposals, policy or execution.",
+        "distractor_notes": {
+          "Only the final answer text.": "Final text can hide attempted side effects.",
+          "Only the GPU temperature during inference.": "Device temperature is not action authority.",
+          "Only the percentage of correct ordinary FAQs.": "Unrelated FAQs do not describe this failure."
+        },
+        "insight": "If executor denied all proposals, distinguish attempts from actual forbidden commits."
+      },
+      {
+        "stage": "3 · Design the gate",
+        "question": "Which release process best fits the evidence?",
+        "options": [
+          "Block pending root-cause and negative regression proof; rerun frozen and new failure cases before canary.",
+          "Ship immediately because average correctness rose.",
+          "Delete rare failure categories from the test suite.",
+          "Disable traces so user reports are the only signal."
+        ],
+        "answer": "Block pending root-cause and negative regression proof; rerun frozen and new failure cases before canary.",
+        "explanation": "Releasing by evidence requires stable hard gates and expanding failure suites.",
+        "distractor_notes": {
+          "Ship immediately because average correctness rose.": "Aggregate accuracy is insufficient.",
+          "Delete rare failure categories from the test suite.": "Removing tests hides risk.",
+          "Disable traces so user reports are the only signal.": "Lack of traces impairs review."
+        },
+        "insight": "Define failure-specific ownership and rollback trigger."
+      }
+    ],
+    "proof": "Evidence pack: frozen evaluation fixtures, unsafe trajectories, per-slice metrics, policy test and canary rollback.",
+    "connections": [
+      "harness",
+      "production",
+      "rag"
+    ]
+  },
+  {
+    "id": "production",
+    "title": "Faster is not always better",
+    "story": "An AI platform has strict p95 response targets and regulated workloads. A candidate backend improves reasoning but exceeds the latency SLO for routine requests.",
+    "objective": "Choose a measured service architecture with operational recovery and quality gates.",
+    "evidence": [
+      [
+        "Metric",
+        "Baseline",
+        "Candidate"
+      ],
+      [
+        "Routine p95",
+        "3.3 s",
+        "8.1 s"
+      ],
+      [
+        "Reasoning accuracy",
+        "86%",
+        "89%"
+      ],
+      [
+        "SLO",
+        "≤4 s",
+        "≤4 s"
+      ],
+      [
+        "Sensitive-data handling",
+        "Local",
+        "Requires policy review"
+      ]
+    ],
+    "constraints": [
+      "Do not redefine the SLO after measuring the candidate.",
+      "Respect data-handling policy and rollback requirements."
+    ],
+    "steps": [
+      {
+        "stage": "1 · Identify the trade-off",
+        "question": "Which finding is established by the provided numbers?",
+        "options": [
+          "The candidate improves measured accuracy but fails the routine request p95 SLO.",
+          "All requests are slower by exactly 4.8 seconds.",
+          "The baseline is inaccurate for every user.",
+          "The new backend is impossible to use for any workload."
+        ],
+        "answer": "The candidate improves measured accuracy but fails the routine request p95 SLO.",
+        "explanation": "Measured aggregate and tail outcomes support a trade-off, not an absolute judgment.",
+        "distractor_notes": {
+          "All requests are slower by exactly 4.8 seconds.": "p95 does not apply to each request.",
+          "The baseline is inaccurate for every user.": "86% includes successful cases.",
+          "The new backend is impossible to use for any workload.": "Different tasks may justify different latency."
+        },
+        "insight": "Do not hide minority regressions behind average improvements."
+      },
+      {
+        "stage": "2 · Evaluate architecture",
+        "question": "Which response preserves both business requirements best?",
+        "options": [
+          "Test task-aware local/hosted routing with strict data classification, measurable fallback and per-class SLOs.",
+          "Send all regulated documents to the hosted model by default.",
+          "Use only the fast model, regardless of difficult-case failures.",
+          "Choose by GPU model number without task evaluations."
+        ],
+        "answer": "Test task-aware local/hosted routing with strict data classification, measurable fallback and per-class SLOs.",
+        "explanation": "Hybrid selection can balance latency, quality and data boundaries if measured and governed.",
+        "distractor_notes": {
+          "Send all regulated documents to the hosted model by default.": "Data residency may prohibit it.",
+          "Use only the fast model, regardless of difficult-case failures.": "Complex tasks may need stronger reasoning.",
+          "Choose by GPU model number without task evaluations.": "Hardware labels are not completed-task outcomes."
+        },
+        "insight": "Include routing overhead and misclassification in benchmarks."
+      },
+      {
+        "stage": "3 · Define a production gate",
+        "question": "Which package of evidence justifies rollout?",
+        "options": [
+          "Representative A/B tasks, per-slice p95, factual/safety checks, cost per accepted task, canary and rollback test.",
+          "One polished demo and a positive customer quote.",
+          "Average output tokens/s alone.",
+          "A plan to measure failures only after all users migrate."
+        ],
+        "answer": "Representative A/B tasks, per-slice p95, factual/safety checks, cost per accepted task, canary and rollback test.",
+        "explanation": "A release gate must cover user outcomes, operational reliability and recovery.",
+        "distractor_notes": {
+          "One polished demo and a positive customer quote.": "Anecdotes cannot prove safety.",
+          "Average output tokens/s alone.": "Token speed omits task completion.",
+          "A plan to measure failures only after all users migrate.": "Post-release-only measurement shifts risk to users."
+        },
+        "insight": "Write an ADR with rejected alternatives and an exit/rollback criterion."
+      }
+    ],
+    "proof": "Evidence pack: routing ADR, per-class quality/p95/cost, data policy matrix, canary and rollback results.",
+    "connections": [
+      "inference",
+      "eval",
+      "local"
+    ]
+  }
+]

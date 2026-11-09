@@ -1,0 +1,114 @@
+[
+  {
+    "week": 1,
+    "title": "Prerequisites",
+    "focus": "Python, HTTP, JSON, Git, basic command safety",
+    "deliverable": "Make one safe API call and explain status vs result.",
+    "module": "stack"
+  },
+  {
+    "week": 2,
+    "title": "Token contracts",
+    "focus": "Tokenizers, vocabularies, roles, chat templates",
+    "deliverable": "Compare token counts and draw the model contract.",
+    "module": "models"
+  },
+  {
+    "week": 3,
+    "title": "Transformer behavior",
+    "focus": "Attention, logits, sampling and uncertainty",
+    "deliverable": "Explain a simple next-token trace and test two sampling settings.",
+    "module": "models"
+  },
+  {
+    "week": 4,
+    "title": "Inference phases",
+    "focus": "Prefill, decode, KV cache, memory and latency",
+    "deliverable": "Produce a memory worksheet and teach back cost drivers.",
+    "module": "inference"
+  },
+  {
+    "week": 5,
+    "title": "Local deployment",
+    "focus": "Runtime, model artifact, serving API and probes",
+    "deliverable": "Run or design one pinned local-model smoke test.",
+    "module": "local"
+  },
+  {
+    "week": 6,
+    "title": "Formats and alternatives",
+    "focus": "Quantization, model compatibility, local vs remote",
+    "deliverable": "Write a deployment decision with compatibility and rollback.",
+    "module": "local"
+  },
+  {
+    "week": 7,
+    "title": "Task contracts",
+    "focus": "Context budgets, schemas, structured outputs",
+    "deliverable": "Run ten positive/negative schema regression cases.",
+    "module": "context"
+  },
+  {
+    "week": 8,
+    "title": "Bounded tool agent",
+    "focus": "State machine, scopes, loop limits and sandboxing",
+    "deliverable": "Implement or specify a read-only agent with a stop rule.",
+    "module": "harness"
+  },
+  {
+    "week": 9,
+    "title": "MCP integration",
+    "focus": "Host, client, server and protocol revision",
+    "deliverable": "Specify one read-only MCP capability and denial test.",
+    "module": "tools"
+  },
+  {
+    "week": 10,
+    "title": "Retrieval & grounding",
+    "focus": "Ingest, chunk, search, rank, cite",
+    "deliverable": "Build a 30-document evidence assistant baseline.",
+    "module": "rag"
+  },
+  {
+    "week": 11,
+    "title": "Evaluation engineering",
+    "focus": "Golden tasks, observations, traces and score slices",
+    "deliverable": "Measure a 30-case evaluation with error categories.",
+    "module": "eval"
+  },
+  {
+    "week": 12,
+    "title": "Threat modelling",
+    "focus": "Prompt injection, permissions, approval, egress",
+    "deliverable": "Create a 12-case negative security test suite.",
+    "module": "eval"
+  },
+  {
+    "week": 13,
+    "title": "Reliable orchestration",
+    "focus": "Retries, idempotency, state, checkpoints",
+    "deliverable": "Prove recovery from timeout and ambiguous side effects.",
+    "module": "harness"
+  },
+  {
+    "week": 14,
+    "title": "Serving economics",
+    "focus": "Concurrency, SLOs, caching and costs",
+    "deliverable": "Benchmark latency, throughput and device memory.",
+    "module": "production"
+  },
+  {
+    "week": 15,
+    "title": "Capstone build",
+    "focus": "Integrate one chosen architecture with tests",
+    "deliverable": "Deliver versioned artifact and implementation evidence.",
+    "module": "production"
+  },
+  {
+    "week": 16,
+    "title": "Independent review",
+    "focus": "Audit, tradeoffs, failure modes and rollback",
+    "deliverable": "Present an ADR, results, risks and next-step plan.",
+    "module": "production"
+  }
+]

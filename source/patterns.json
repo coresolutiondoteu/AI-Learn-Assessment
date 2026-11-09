@@ -1,0 +1,101 @@
+[
+  {
+    "id": "P1",
+    "title": "Direct completion",
+    "flow": "Input → model → answer",
+    "when": "Short explanations, summarization and low-risk prototypes.",
+    "risk": "No live facts; validate hallucinations, formatting and provenance.",
+    "test": "Try one prompt; verify three facts independently.",
+    "module": "models"
+  },
+  {
+    "id": "P2",
+    "title": "Structured extractor",
+    "flow": "Source → model → typed object → validator",
+    "when": "Extract fields from variable-format texts into a strict downstream schema.",
+    "risk": "Schema-valid output can still contain wrong values; add semantic checks.",
+    "test": "Feed missing fields, wrong types and contradictory source text.",
+    "module": "context"
+  },
+  {
+    "id": "P3",
+    "title": "Retrieval-augmented generation",
+    "flow": "Query → retrieve → generate → cite",
+    "when": "Answer from changing or private documents without modifying model weights.",
+    "risk": "Index freshness, ACLs and source injections must be controlled.",
+    "test": "Retrieve an obsolete or unauthorized version and ensure rejection.",
+    "module": "rag"
+  },
+  {
+    "id": "P4",
+    "title": "Router",
+    "flow": "Classify request → select branch → execute",
+    "when": "Select known specialist pipelines or models for predictable categories.",
+    "risk": "Wrong classification compounds downstream error; deterministic rules may be better.",
+    "test": "Route ambiguous queries and verify false branch selection is detected.",
+    "module": "harness"
+  },
+  {
+    "id": "P5",
+    "title": "Fixed pipeline",
+    "flow": "Step A → Step B → validate → Step C",
+    "when": "Repeatable tasks with known ordering and audit checkpoints.",
+    "risk": "Less flexible for novel tasks; benefit is predictable acceptance and rollback.",
+    "test": "Inject a failed validation and show the next step did not run.",
+    "module": "harness"
+  },
+  {
+    "id": "P6",
+    "title": "Parallel fan-out / reduce",
+    "flow": "Split → parallel workers → merge → verify",
+    "when": "Many independent subtasks or document analyses with controlled merge.",
+    "risk": "Merge conflicts, duplicated side effects, extra tokens and partial failures.",
+    "test": "Make one branch fail and prove aggregator reports partial output.",
+    "module": "harness"
+  },
+  {
+    "id": "P7",
+    "title": "Bounded ReAct agent",
+    "flow": "Model → tool → observe → repeat with limit",
+    "when": "Unknown next investigation step where evidence determines the next tool.",
+    "risk": "Prompt injection, loops, runaway costs; enforce scopes and stopping rules.",
+    "test": "Feed the same tool error twice; verify bounded escalation.",
+    "module": "harness"
+  },
+  {
+    "id": "P8",
+    "title": "Planner / executor",
+    "flow": "Plan → execute → verify → revise",
+    "when": "Long tasks needing decomposition, replanning and independent checks.",
+    "risk": "Plans become stale when environment changes; reviews must use live proof.",
+    "test": "Change an input after planning and check the replan gate.",
+    "module": "harness"
+  },
+  {
+    "id": "P9",
+    "title": "Supervisor / specialists",
+    "flow": "Manager → specialists → integrate/review",
+    "when": "Independent expert subtasks that warrant ownership separation.",
+    "risk": "Coordination cost, provenance gaps and broader trust boundaries.",
+    "test": "Have specialists disagree and require manager to retain evidence.",
+    "module": "harness"
+  },
+  {
+    "id": "P10",
+    "title": "Human-in-the-loop",
+    "flow": "Propose → authorize → commit → verify",
+    "when": "Irreversible, regulated, expensive or privileged operations.",
+    "risk": "Pause/resume, approval freshness, exact scope and audit become central.",
+    "test": "Deny approval and verify no side effects happen.",
+    "module": "eval"
+  },
+  {
+    "id": "P11",
+    "title": "Durable event workflow",
+    "flow": "Event queue → checkpoint → retry/reconcile",
+    "when": "Long jobs, outages, external waiting and restart recovery.",
+    "risk": "Idempotency, cancellation, concurrency and audit must be designed.",
+    "test": "Timeout after remote success; verify no duplicate operation.",
+    "module": "production"
+  }
+]

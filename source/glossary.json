@@ -1,0 +1,695 @@
+[
+  {
+    "term": "TUI",
+    "definition": "Terminal User Interface; text UI rendered in a terminal.",
+    "module": "stack",
+    "layer": "L9",
+    "contrast": "Different from a CLI and from the running model."
+  },
+  {
+    "term": "CLI",
+    "definition": "Command-line interface; commands and flags invoked from a shell.",
+    "module": "stack",
+    "layer": "L9",
+    "contrast": "A CLI command may launch a TUI or call an API."
+  },
+  {
+    "term": "IDE",
+    "definition": "Integrated development environment, commonly editor plus debugging/build tools.",
+    "module": "stack",
+    "layer": "L9",
+    "contrast": "A coding agent may integrate into an IDE but run elsewhere."
+  },
+  {
+    "term": "agent",
+    "definition": "Goal-directed process that uses a model and may choose tools or next actions.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Not the same as the underlying model."
+  },
+  {
+    "term": "harness",
+    "definition": "Surrounding execution/control system for tasks, tools, permissions, state and verification.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "More than a prompt and often separate from the model."
+  },
+  {
+    "term": "orchestration",
+    "definition": "Rules coordinating steps, tools, models, data and approvals.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "May be fixed workflow or dynamic agent control."
+  },
+  {
+    "term": "model server",
+    "definition": "Long-running service exposing a model inference interface.",
+    "module": "local",
+    "layer": "L6/L4",
+    "contrast": "Serving is not identical to the model weights."
+  },
+  {
+    "term": "model API",
+    "definition": "Contract for sending inputs and receiving model outputs.",
+    "module": "stack",
+    "layer": "L6",
+    "contrast": "Can be remote or loopback."
+  },
+  {
+    "term": "runtime",
+    "definition": "Software managing execution; always specify OS, language or inference runtime.",
+    "module": "stack",
+    "layer": "L4/L1",
+    "contrast": "Not necessarily an operating system kernel."
+  },
+  {
+    "term": "OS kernel",
+    "definition": "Privileged core of operating system managing processes and devices.",
+    "module": "stack",
+    "layer": "L1",
+    "contrast": "Different from GPU compute or notebook kernels."
+  },
+  {
+    "term": "GPU kernel",
+    "definition": "Program/operation executed on GPU for tensor compute.",
+    "module": "inference",
+    "layer": "L2",
+    "contrast": "Different from the OS kernel."
+  },
+  {
+    "term": "notebook kernel",
+    "definition": "Interpreter process executing notebook cells.",
+    "module": "stack",
+    "layer": "L9/L1",
+    "contrast": "Not the operating system kernel."
+  },
+  {
+    "term": "accelerator",
+    "definition": "Hardware such as GPU/NPU for compute workloads.",
+    "module": "inference",
+    "layer": "L0",
+    "contrast": "Supported kernels and software determine usable performance."
+  },
+  {
+    "term": "control plane",
+    "definition": "Logic directing state, policies, scheduling, authorization and actions.",
+    "module": "stack",
+    "layer": "L8/L7",
+    "contrast": "Distinct from numerical compute plane."
+  },
+  {
+    "term": "compute plane",
+    "definition": "Layer executing the tensor operations needed for generation.",
+    "module": "stack",
+    "layer": "L4-L0",
+    "contrast": "Does not authorize filesystem actions."
+  },
+  {
+    "term": "weights",
+    "definition": "Learned numerical parameters in a model.",
+    "module": "models",
+    "layer": "L3",
+    "contrast": "Not an executable agent."
+  },
+  {
+    "term": "tokenizer",
+    "definition": "Algorithm mapping text and control sequences to model token IDs.",
+    "module": "models",
+    "layer": "L5",
+    "contrast": "Must be compatible with model embeddings."
+  },
+  {
+    "term": "token ID",
+    "definition": "Discrete vocabulary index consumed by an embedding table.",
+    "module": "models",
+    "layer": "L5",
+    "contrast": "Not always one whole word."
+  },
+  {
+    "term": "embedding",
+    "definition": "Dense vector representation of a token or text.",
+    "module": "models",
+    "layer": "L3/L7",
+    "contrast": "Token embeddings and retrieval embeddings serve different roles."
+  },
+  {
+    "term": "transformer",
+    "definition": "Neural architecture with attention-based sequence processing.",
+    "module": "models",
+    "layer": "L3",
+    "contrast": "Model family, not an execution harness."
+  },
+  {
+    "term": "attention",
+    "definition": "Mechanism combining sequence-position representations.",
+    "module": "models",
+    "layer": "L3",
+    "contrast": "Not a guarantee of perfect recall."
+  },
+  {
+    "term": "logits",
+    "definition": "Raw next-token scores before probability conversion.",
+    "module": "models",
+    "layer": "L4",
+    "contrast": "Not calibrated factual confidence."
+  },
+  {
+    "term": "temperature",
+    "definition": "Decoding control that changes distribution sharpness.",
+    "module": "models",
+    "layer": "L4",
+    "contrast": "Not a factuality guarantee."
+  },
+  {
+    "term": "top-p",
+    "definition": "Sampling filter that selects a probability-mass candidate set.",
+    "module": "models",
+    "layer": "L4",
+    "contrast": "Different from top-k selection."
+  },
+  {
+    "term": "chat template",
+    "definition": "Serialization of roles, message boundaries and tool conventions.",
+    "module": "context",
+    "layer": "L5",
+    "contrast": "Not interchangeable across arbitrary models."
+  },
+  {
+    "term": "context window",
+    "definition": "Maximum model-visible token budget for an inference request.",
+    "module": "context",
+    "layer": "L5/L4",
+    "contrast": "Maximum size is not same as effective evidence use."
+  },
+  {
+    "term": "system message",
+    "definition": "High-priority model-facing instruction role where supported.",
+    "module": "context",
+    "layer": "L5",
+    "contrast": "Model instruction does not grant executor permissions."
+  },
+  {
+    "term": "tool result",
+    "definition": "Information returned by an invoked tool.",
+    "module": "context",
+    "layer": "L7",
+    "contrast": "Lower-trust data, not policy authority."
+  },
+  {
+    "term": "prefill",
+    "definition": "Initial prompt processing phase that creates attention state.",
+    "module": "inference",
+    "layer": "L4",
+    "contrast": "Affects time to first token."
+  },
+  {
+    "term": "decode",
+    "definition": "Autoregressive generation of successive output tokens.",
+    "module": "inference",
+    "layer": "L4",
+    "contrast": "Often memory-bandwidth sensitive."
+  },
+  {
+    "term": "KV cache",
+    "definition": "Stored attention key/value tensors from earlier token positions.",
+    "module": "inference",
+    "layer": "L4",
+    "contrast": "Grows with context and concurrent sequences."
+  },
+  {
+    "term": "GQA",
+    "definition": "Grouped-query attention using fewer key/value heads.",
+    "module": "inference",
+    "layer": "L3/L4",
+    "contrast": "Can reduce KV cache size."
+  },
+  {
+    "term": "quantization",
+    "definition": "Representing tensors at reduced numerical precision.",
+    "module": "inference",
+    "layer": "L3/L2",
+    "contrast": "Can change quality, speed and compatibility."
+  },
+  {
+    "term": "continuous batching",
+    "definition": "Serving scheduler mixes active decoding sequences over time.",
+    "module": "inference",
+    "layer": "L4",
+    "contrast": "Can improve throughput with latency trade-offs."
+  },
+  {
+    "term": "TTFT",
+    "definition": "Time to first token including queueing/prefill.",
+    "module": "inference",
+    "layer": "L4/L6",
+    "contrast": "Different from output tokens per second."
+  },
+  {
+    "term": "throughput",
+    "definition": "Completed work per unit time, e.g. tokens/second.",
+    "module": "inference",
+    "layer": "L4",
+    "contrast": "Not the same as tail latency."
+  },
+  {
+    "term": "inference runtime",
+    "definition": "Backend loading model assets and executing generation.",
+    "module": "local",
+    "layer": "L4",
+    "contrast": "Distinct from HTTP serving wrapper."
+  },
+  {
+    "term": "serving layer",
+    "definition": "API, scheduling, rate limiting and operational interface over inference.",
+    "module": "local",
+    "layer": "L6/L4",
+    "contrast": "May be a separate process or integrated."
+  },
+  {
+    "term": "HTTP endpoint",
+    "definition": "Network address/route accepting structured requests.",
+    "module": "local",
+    "layer": "L6",
+    "contrast": "Localhost does not mean unrestricted public access."
+  },
+  {
+    "term": "health probe",
+    "definition": "Small automated check of process/request readiness.",
+    "module": "local",
+    "layer": "L6",
+    "contrast": "Process health does not prove task correctness."
+  },
+  {
+    "term": "driver",
+    "definition": "Software interfacing with hardware devices.",
+    "module": "local",
+    "layer": "L1",
+    "contrast": "Version compatibility matters for compute kernels."
+  },
+  {
+    "term": "rollback",
+    "definition": "Return to a previously verified state after regression.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Must include artifacts, config and evidence."
+  },
+  {
+    "term": "schema validation",
+    "definition": "Deterministic check that output or arguments meet an explicit contract.",
+    "module": "context",
+    "layer": "L8",
+    "contrast": "Not the same as asking the model to “use JSON”."
+  },
+  {
+    "term": "prefix cache",
+    "definition": "Reuse of compatible identical prompt-prefix computation.",
+    "module": "context",
+    "layer": "L4",
+    "contrast": "Depends on backend and isolation policy."
+  },
+  {
+    "term": "provenance",
+    "definition": "Record of where information or decisions originated.",
+    "module": "context",
+    "layer": "Cross-cutting",
+    "contrast": "Necessary to trust citations and actions."
+  },
+  {
+    "term": "tool schema",
+    "definition": "Description and type requirements for tool inputs/outputs.",
+    "module": "tools",
+    "layer": "L7",
+    "contrast": "Not sufficient authorization by itself."
+  },
+  {
+    "term": "MCP host",
+    "definition": "Application coordinating MCP clients as part of its model workflow.",
+    "module": "tools",
+    "layer": "L7/L8",
+    "contrast": "Host is not the MCP server."
+  },
+  {
+    "term": "MCP client",
+    "definition": "Protocol participant that communicates with an MCP server.",
+    "module": "tools",
+    "layer": "L7",
+    "contrast": "One host can manage multiple clients."
+  },
+  {
+    "term": "MCP server",
+    "definition": "Service exposing MCP tools, resources or prompts.",
+    "module": "tools",
+    "layer": "L7",
+    "contrast": "Still needs access control."
+  },
+  {
+    "term": "resource",
+    "definition": "MCP data surface addressable through a URI where supported.",
+    "module": "tools",
+    "layer": "L7",
+    "contrast": "Not necessarily an executable action."
+  },
+  {
+    "term": "API",
+    "definition": "Defined interface for operations and data exchange.",
+    "module": "tools",
+    "layer": "L6/L7",
+    "contrast": "Not intrinsically an agent or a TUI."
+  },
+  {
+    "term": "SDK",
+    "definition": "Library simplifying use of an API/protocol.",
+    "module": "tools",
+    "layer": "L6/L7",
+    "contrast": "SDK version may lag protocol spec."
+  },
+  {
+    "term": "A2A",
+    "definition": "Protocol for inter-agent coordination/delegation.",
+    "module": "tools",
+    "layer": "L7/L8",
+    "contrast": "Different goal from MCP tool exposure."
+  },
+  {
+    "term": "authorization",
+    "definition": "Decision whether a principal may perform an action on a resource.",
+    "module": "tools",
+    "layer": "L8/L7",
+    "contrast": "Must not be delegated to model text."
+  },
+  {
+    "term": "ReAct",
+    "definition": "Pattern alternating action selection and tool observations.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Does not guarantee safe actions."
+  },
+  {
+    "term": "planner-executor",
+    "definition": "Pattern separating planning from execution and optional verification.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Adds orchestration overhead."
+  },
+  {
+    "term": "idempotency",
+    "definition": "Property where repeating an operation causes no additional unintended effect.",
+    "module": "harness",
+    "layer": "L8/L7",
+    "contrast": "Important after timeouts."
+  },
+  {
+    "term": "human-in-the-loop",
+    "definition": "A workflow that requests human oversight at selected gates.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Must gate the executor before the action."
+  },
+  {
+    "term": "checkpoint",
+    "definition": "Saved state used for resuming, reviewing or restoring a task.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Not only a chat message."
+  },
+  {
+    "term": "RAG",
+    "definition": "Retrieval-augmented generation; supplying retrieved evidence at inference time.",
+    "module": "rag",
+    "layer": "L7/L5",
+    "contrast": "Does not modify model weights."
+  },
+  {
+    "term": "embedding search",
+    "definition": "Nearest-vector retrieval using semantic representations.",
+    "module": "rag",
+    "layer": "L7",
+    "contrast": "Exact identifiers may need lexical search."
+  },
+  {
+    "term": "hybrid search",
+    "definition": "Combination of lexical and semantic retrieval.",
+    "module": "rag",
+    "layer": "L7",
+    "contrast": "Often useful for code and error strings."
+  },
+  {
+    "term": "chunking",
+    "definition": "Splitting documents into indexable text units.",
+    "module": "rag",
+    "layer": "L7",
+    "contrast": "Impacts recall and context."
+  },
+  {
+    "term": "reranking",
+    "definition": "Rescoring retrieved candidates for query relevance.",
+    "module": "rag",
+    "layer": "L7",
+    "contrast": "Adds latency but can improve precision."
+  },
+  {
+    "term": "recall@k",
+    "definition": "Share of labeled relevant items found in top-k retrieval.",
+    "module": "rag",
+    "layer": "L7",
+    "contrast": "Not overall answer correctness."
+  },
+  {
+    "term": "citation grounding",
+    "definition": "Checking that answer claims are supported by named source spans.",
+    "module": "rag",
+    "layer": "L7",
+    "contrast": "Generated citations can be incorrect."
+  },
+  {
+    "term": "durable memory",
+    "definition": "Explicit, persistent information available across task sessions.",
+    "module": "rag",
+    "layer": "L8/L7",
+    "contrast": "Distinct from transient context and KV cache."
+  },
+  {
+    "term": "evaluation harness",
+    "definition": "System running reproducible tests and scoring outputs.",
+    "module": "eval",
+    "layer": "Cross-cutting",
+    "contrast": "Separate from the task-execution harness."
+  },
+  {
+    "term": "regression test",
+    "definition": "Test detecting a change from previously accepted behavior.",
+    "module": "eval",
+    "layer": "Cross-cutting",
+    "contrast": "Must include negative and slice cases."
+  },
+  {
+    "term": "prompt injection",
+    "definition": "Untrusted content attempting to change model/agent instructions.",
+    "module": "eval",
+    "layer": "Cross-cutting",
+    "contrast": "Privilege boundaries must withstand it."
+  },
+  {
+    "term": "sandbox",
+    "definition": "Restricted execution environment limiting process capabilities.",
+    "module": "eval",
+    "layer": "L1/L8",
+    "contrast": "Not a synonym for correct authorization."
+  },
+  {
+    "term": "least privilege",
+    "definition": "Grant only permissions needed for the task.",
+    "module": "eval",
+    "layer": "Cross-cutting",
+    "contrast": "Lowers damage from mistakes/injections."
+  },
+  {
+    "term": "approval gate",
+    "definition": "Blocking check before performing a sensitive action.",
+    "module": "eval",
+    "layer": "L8",
+    "contrast": "Prompt-based permission is insufficient."
+  },
+  {
+    "term": "audit trace",
+    "definition": "Correlated evidence of decisions, calls, validations and outcomes.",
+    "module": "eval",
+    "layer": "Cross-cutting",
+    "contrast": "Protect sensitive values from logging."
+  },
+  {
+    "term": "threat model",
+    "definition": "Map assets, attackers, entry points, trust boundaries and mitigations.",
+    "module": "eval",
+    "layer": "Cross-cutting",
+    "contrast": "Specific to actual workflow and capability."
+  },
+  {
+    "term": "SLO",
+    "definition": "Service-level objective: measurable reliability/latency target.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Defined using SLIs and a time window."
+  },
+  {
+    "term": "SLI",
+    "definition": "Service-level indicator measuring observed system behavior.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Needs clear instrumentation and thresholds."
+  },
+  {
+    "term": "p95 latency",
+    "definition": "Latency that 95 percent of measured requests meet or beat.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Captures tail behavior better than only mean."
+  },
+  {
+    "term": "error budget",
+    "definition": "Permitted unreliability under an agreed service objective.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Requires a meaningful SLO."
+  },
+  {
+    "term": "ADR",
+    "definition": "Architecture decision record of options, evidence, decision and trade-offs.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Not a promotional comparison."
+  },
+  {
+    "term": "canary",
+    "definition": "Limited rollout used to evaluate changes before broad exposure.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Needs measurement and rollback plan."
+  },
+  {
+    "term": "observability",
+    "definition": "Ability to infer internal state from metrics, logs and traces.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Do not confuse with collecting everything."
+  },
+  {
+    "term": "direct completion",
+    "definition": "Single model call for a straightforward answer without external tools.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Not a guaranteed grounded workflow."
+  },
+  {
+    "term": "structured extractor",
+    "definition": "Model-generated typed fields followed by external validation.",
+    "module": "context",
+    "layer": "L8/L5",
+    "contrast": "Schema validity does not prove source truth."
+  },
+  {
+    "term": "router",
+    "definition": "Logic selecting one predefined branch or capability based on input.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Wrong classification can propagate errors."
+  },
+  {
+    "term": "fixed pipeline",
+    "definition": "Deterministic ordered steps with explicit gates.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Less autonomous than agent-led tool choice."
+  },
+  {
+    "term": "parallel fan-out",
+    "definition": "Split independent subtasks, execute concurrently, merge evidence.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Parallel calls need not be autonomous agents."
+  },
+  {
+    "term": "bounded ReAct",
+    "definition": "Model-tool-observe loop constrained by permissions and budgets.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Open-ended autonomy adds variance and risk."
+  },
+  {
+    "term": "supervisor-specialists",
+    "definition": "Manager coordinates narrower specialist processes and reviews outputs.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Can add coordination cost and trust boundaries."
+  },
+  {
+    "term": "durable event workflow",
+    "definition": "Queued tasks with checkpoints, retries and idempotency controls.",
+    "module": "production",
+    "layer": "L8",
+    "contrast": "Requires explicit state beyond model context."
+  },
+  {
+    "term": "handoff",
+    "definition": "Transfer of task ownership from one agent to another.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Can lose context or approval scope."
+  },
+  {
+    "term": "agents-as-tools",
+    "definition": "A manager treats a specialist agent as a bounded capability.",
+    "module": "harness",
+    "layer": "L8/L7",
+    "contrast": "Keep nested budgets and evidence."
+  },
+  {
+    "term": "reviewer / critic",
+    "definition": "Secondary checking stage assessing an output before an effect.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Second opinions may share correlated errors."
+  },
+  {
+    "term": "self-reflection loop",
+    "definition": "Retry after meaningful error or feedback rather than model self-confirmation.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Must not become unbounded self-review."
+  },
+  {
+    "term": "capacity planning",
+    "definition": "Forecast workload, concurrency, resource usage and limits before deployment.",
+    "module": "production",
+    "layer": "Cross-cutting",
+    "contrast": "Must use real workload and quality targets."
+  },
+  {
+    "term": "fine-tuning",
+    "definition": "Training additional updates to model parameters using task-specific data.",
+    "module": "models",
+    "layer": "L3",
+    "contrast": "Different from retrieval and prompt changes."
+  },
+  {
+    "term": "hallucination",
+    "definition": "Plausible generated content unsupported or contradicted by evidence.",
+    "module": "models",
+    "layer": "L3/L4",
+    "contrast": "Requires grounding and independent checks."
+  },
+  {
+    "term": "model artifact",
+    "definition": "Stored weights, architecture metadata and compatible supporting assets.",
+    "module": "local",
+    "layer": "L3",
+    "contrast": "Not identical to an inference server."
+  },
+  {
+    "term": "termination condition",
+    "definition": "Explicit criterion to stop, fail or escalate a task loop.",
+    "module": "harness",
+    "layer": "L8",
+    "contrast": "Independent of model requests to continue."
+  }
+]

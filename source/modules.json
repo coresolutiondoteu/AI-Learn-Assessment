@@ -1,0 +1,1445 @@
+[
+  {
+    "id": "stack",
+    "title": "01 · Stack and vocabulary",
+    "subtitle": "Trace a request from UI to silicon; separate interaction, control, model and compute.",
+    "chapters": "00, 00A, 00B, 01",
+    "pages": "4–15",
+    "stage": "FOUNDATIONS",
+    "outcomes": [
+      "Explain L0–L9 without treating it as ten separate processes",
+      "Distinguish UI, agent, harness, model server and compute kernel",
+      "Locate a failure at the boundary that can actually produce it"
+    ],
+    "pipeline": [
+      "User asks in TUI",
+      "Harness assembles context and policy",
+      "Tools or retrieval provide evidence",
+      "Model API serializes input",
+      "Runtime computes token probabilities",
+      "Harness validates and returns result"
+    ],
+    "topics": [
+      {
+        "name": "The ten-layer mental map",
+        "problem": "A single “AI app” hides multiple owners and failure modes.",
+        "explain": "L9 presents the task, L8 controls work, L7 connects tools and evidence, L6 exposes the model API, L5 serializes tokens, L4 executes inference, L3 loads model assets, L2 runs compute kernels, L1 provides OS and device services, and L0 supplies hardware. Boundaries are conceptual, not necessarily separate machines.",
+        "example": "A coding assistant may display a TUI on your laptop but send inference to a remote model server while executing shell commands locally.",
+        "tradeoff": "Swapping the TUI rarely alters inference quality; swapping tokenizer, context policy or model may.",
+        "failure": "A user-visible hang could occur in tools, network, queue, first-token latency or UI: trace all owners.",
+        "connections": [
+          "harness",
+          "stack",
+          "inference"
+        ]
+      },
+      {
+        "name": "Control plane vs compute plane",
+        "problem": "Model output is not system authority.",
+        "explain": "The control plane owns tool permissions, approvals, retries, memory, budgets and state; the compute plane predicts tokens. A generated “delete” command does not confer permission to run it.",
+        "example": "The model proposes an action; the harness checks allowlists and asks a human before execution.",
+        "tradeoff": "Moving validation into a prompt is simpler but weaker than deterministic authorization outside the model.",
+        "failure": "A tool ran without approval: investigate the harness/executor, not “model alignment” alone.",
+        "connections": [
+          "harness",
+          "tools",
+          "eval"
+        ]
+      },
+      {
+        "name": "Three meanings of kernel",
+        "problem": "The same term means radically different things at different layers.",
+        "explain": "An OS kernel manages processes, memory and devices. A GPU compute kernel is an operation executed on an accelerator. A Jupyter kernel is a language execution process. They have different security and performance responsibilities.",
+        "example": "An out-of-memory CUDA kernel and a crashed notebook kernel have different root causes despite sharing a word.",
+        "tradeoff": "Changing an attention kernel may accelerate inference; updating the OS kernel can alter driver compatibility.",
+        "failure": "A “kernel error” report without a layer is not diagnostically meaningful.",
+        "connections": [
+          "inference",
+          "local",
+          "production"
+        ]
+      },
+      {
+        "name": "Interfaces do not equal backends",
+        "problem": "CLI, TUI, IDE and browser are interaction surfaces.",
+        "explain": "A CLI exposes commands, a TUI provides terminal interaction, an IDE integrates editing, and an HTTP API exposes services. The same harness can serve several frontends, and different frontends can hide different harnesses.",
+        "example": "A terminal coding agent may invoke the same model provider as a web agent but use different tools and execution permissions.",
+        "tradeoff": "Replacing the frontend changes ergonomics; replacing the harness changes safety, retries and task completion behavior.",
+        "failure": "A frontend reports “done” but nothing was written: inspect the harness and filesystem proof.",
+        "connections": [
+          "harness",
+          "tools"
+        ]
+      },
+      {
+        "name": "The compatibility triangle",
+        "problem": "Model weights are not self-describing execution contracts.",
+        "explain": "Architecture, weights, tokenizer and chat template must match. A serving runtime also needs supported numerical formats, kernels and hardware. “Model loaded” does not prove prompt formatting is correct.",
+        "example": "A quantized variant can preserve tokenizer and template; a different model family may not.",
+        "tradeoff": "A mismatched chat template may silently degrade responses rather than trigger an obvious crash.",
+        "failure": "Sudden tool-call failures after a model swap suggest template and schema compatibility checks.",
+        "connections": [
+          "models",
+          "inference",
+          "local"
+        ]
+      },
+      {
+        "name": "End-to-end proof",
+        "problem": "A green API status is not evidence that an entire workflow succeeded.",
+        "explain": "Trace user intent, assembled request, model response, proposed actions, applied policy, tool side effects and validated deliverable. Assign each event an owner and correlation ID.",
+        "example": "For a file-edit agent, prove the correct file hash, tests, approval, and no unauthorized writes.",
+        "tradeoff": "More trace detail improves diagnosis but increases retention and privacy obligations.",
+        "failure": "“Completed” with no artifact or action log is an unproven claim.",
+        "connections": [
+          "eval",
+          "production"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Build your own stack trace",
+      "minutes": 35,
+      "goal": "Turn one imagined user request into a six-event trace with owners and evidence.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Pick a task",
+          "detail": "Choose “summarize two local notes and write a report.” Label which components are local and which would be remote.",
+          "code": ""
+        },
+        {
+          "title": "Map the control/data path",
+          "detail": "Use this template and fill owner, input, output, failure, and proof for each stage.",
+          "code": "stage,owner,input,output,failure,proof\nUI,,,,,\nHarness,,,,,\nTool,,,,,\nModel API,,,,,\nInference,,,,,\nValidator,,,,,"
+        },
+        {
+          "title": "Inject faults",
+          "detail": "Simulate: wrong file permission; model timeout; invalid output. Identify the first responsible layer and fallback.",
+          "code": ""
+        },
+        {
+          "title": "Defend the design",
+          "detail": "Write a 100-word note: why the model cannot grant permission to read a file.",
+          "code": ""
+        }
+      ],
+      "evidence": "Six populated rows, three distinct layer diagnoses, and one clear authorization boundary.",
+      "stretch": "Redo the diagram for a remote model server while local tools run on a laptop.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "codex",
+      "openhands",
+      "otel"
+    ],
+    "terms": [
+      "TUI",
+      "CLI",
+      "harness",
+      "agent",
+      "runtime",
+      "OS kernel",
+      "GPU kernel",
+      "model server",
+      "control plane",
+      "compute plane"
+    ]
+  },
+  {
+    "id": "models",
+    "title": "02 · Tokens and model mechanics",
+    "subtitle": "Understand what the model predicts, how prompts become tokens and why outputs vary.",
+    "chapters": "02",
+    "pages": "15–16",
+    "stage": "FOUNDATIONS",
+    "outcomes": [
+      "Explain tokenization, embeddings, attention, logits and sampling",
+      "Distinguish training/fine-tuning from inference",
+      "Explain why generated text is not a verified fact"
+    ],
+    "pipeline": [
+      "Unicode text",
+      "Chat template and tokenizer",
+      "Token IDs → embeddings",
+      "Transformer layers/attention",
+      "Logits → sampling",
+      "Tokens → decoded text"
+    ],
+    "topics": [
+      {
+        "name": "Tokenizer and token IDs",
+        "problem": "Models operate on discrete IDs, not directly on human words.",
+        "explain": "A tokenizer splits an input into pieces using a vocabulary and a specific algorithm. Spaces, punctuation and multilingual text can change token counts. Token IDs must match the embeddings expected by the model.",
+        "example": "“Unbelievable” can map to one or several tokens depending on tokenizer and vocabulary.",
+        "tradeoff": "Swapping tokenizers independently can invalidate embedding semantics and model behavior.",
+        "failure": "Token counts differ sharply between model families, causing context-budget surprises.",
+        "connections": [
+          "context",
+          "inference",
+          "stack"
+        ]
+      },
+      {
+        "name": "Embeddings and parameters",
+        "problem": "Token IDs become vectors; learned parameters transform them.",
+        "explain": "Embeddings map IDs to dense numerical representations. The model contains weights learned during training; those weights implement mathematical transformations, not a database of guaranteed statements.",
+        "example": "The same token can influence later tokens differently depending on surrounding context.",
+        "tradeoff": "More parameters can improve capacity but increase storage, latency and compute demands; size alone is not quality.",
+        "failure": "Treating model output as deterministic lookup leads to unsupported confidence.",
+        "connections": [
+          "inference",
+          "rag"
+        ]
+      },
+      {
+        "name": "Attention and context",
+        "problem": "Transformers combine information across sequence positions.",
+        "explain": "Attention builds context-sensitive representations; it is not literal human attention or a perfect memory. Causal decoding conditions each new token on preceding tokens and the allowed context window.",
+        "example": "A pronoun may refer to an earlier name, but long or noisy contexts can still confuse the model.",
+        "tradeoff": "Longer context increases potential evidence but can add KV-cache pressure and distractors.",
+        "failure": "Failure to use a fact present in context can reflect retrieval, position, formatting or model limits.",
+        "connections": [
+          "context",
+          "rag",
+          "inference"
+        ]
+      },
+      {
+        "name": "Logits, sampling and temperature",
+        "problem": "Generation selects one next token repeatedly.",
+        "explain": "The model produces scores (logits) over a vocabulary. Decoding transforms these into candidate probabilities, then chooses tokens via greedy search or sampling settings such as temperature and top-p.",
+        "example": "A low temperature often narrows variability; it does not enforce factuality or tool correctness.",
+        "tradeoff": "High diversity may aid ideation but can harm reproducibility for strict extraction tasks.",
+        "failure": "A schema breaks at temperature 0: investigate templates, decoding, validation and model limits.",
+        "connections": [
+          "context",
+          "eval"
+        ]
+      },
+      {
+        "name": "Training vs inference vs fine-tuning",
+        "problem": "Weights are learned in training and normally held fixed during serving.",
+        "explain": "Pretraining updates model weights from large datasets. Fine-tuning continues targeted weight updates; inference uses existing weights to produce outputs. Retrieval instead supplies new context without modifying parameters.",
+        "example": "A local policy document changes every day: retrieval is usually safer than daily fine-tuning.",
+        "tradeoff": "Fine-tuning can shape behavior but costs data preparation, compute and regression testing.",
+        "failure": "A model ignoring new policy text is not automatically a reason to retrain it.",
+        "connections": [
+          "rag",
+          "local",
+          "eval"
+        ]
+      },
+      {
+        "name": "Hallucination and uncertainty",
+        "problem": "Fluent text can be unsupported by actual evidence.",
+        "explain": "Probability of text is not a calibrated probability of truth. Models can generate plausible wrong citations, commands or explanations. Ground answers with evidence and verify actions with external checks.",
+        "example": "A deployment assistant reports a command succeeded: compare with the actual exit code and service status.",
+        "tradeoff": "Stronger models help but cannot replace citations, constraints and outcome validation.",
+        "failure": "High confidence without source evidence must trigger verification rather than trust.",
+        "connections": [
+          "rag",
+          "eval"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Tokenization and generation thought experiment",
+      "minutes": 30,
+      "goal": "Compare model-independent approximations with real tokenizer measurements.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Estimate tokens",
+          "detail": "Write three short inputs: English, Czech, and JSON. Predict which will consume more tokens; do not assume 1 word = 1 token.",
+          "code": ""
+        },
+        {
+          "title": "Inspect a real tokenizer",
+          "detail": "Use the tokenization repository or tokenizer explorer linked below. Record exact token count and model/tokenizer name.",
+          "code": ""
+        },
+        {
+          "title": "Change punctuation",
+          "detail": "Add formatting, URLs and emoji. Compare token counts and identify why context calculations need measured tokens.",
+          "code": ""
+        },
+        {
+          "title": "Sampling experiment",
+          "detail": "Ask the same safe factual question five times with two decoding settings using any model you have. Count variance.",
+          "code": ""
+        }
+      ],
+      "evidence": "A small token count table with named tokenizer plus a summary of what the decoding change did.",
+      "stretch": "Compare one tokenizer across two languages and explain why portable “tokens per word” rules fail.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "transformers",
+      "tokenizer",
+      "micrograd",
+      "nanochat"
+    ],
+    "terms": [
+      "tokenizer",
+      "token ID",
+      "embedding",
+      "attention",
+      "logits",
+      "temperature",
+      "top-p",
+      "fine-tuning",
+      "hallucination"
+    ]
+  },
+  {
+    "id": "inference",
+    "title": "03 · Inference and hardware",
+    "subtitle": "Follow prefill, decode, KV cache, kernels, quantization and memory constraints.",
+    "chapters": "03",
+    "pages": "16–18",
+    "stage": "SYSTEMS",
+    "outcomes": [
+      "Separate prefill latency from decode throughput",
+      "Estimate a KV cache from explicit assumptions",
+      "Explain throughput/latency trade-offs and quantization limits"
+    ],
+    "pipeline": [
+      "Request queued",
+      "Prompt prefill",
+      "KV cache populated",
+      "Repeated decode steps",
+      "Streaming tokens",
+      "Finalize / release memory"
+    ],
+    "topics": [
+      {
+        "name": "Prefill vs decode",
+        "problem": "Input processing and output generation have different cost profiles.",
+        "explain": "During prefill the runtime processes prompt tokens and builds attention state; time to first token includes queueing and prefill. During autoregressive decode the system repeatedly emits new tokens, commonly constrained by weight/memory movement.",
+        "example": "A long retrieved context can slow first response even when output is short.",
+        "tradeoff": "Optimizing only tokens per second can hide poor time-to-first-token.",
+        "failure": "A new retriever creates slow requests: inspect input length and prefill, not just network.",
+        "connections": [
+          "rag",
+          "local",
+          "production"
+        ]
+      },
+      {
+        "name": "KV cache",
+        "problem": "Reuse previous attention keys/values instead of recomputing all past positions.",
+        "explain": "For a common transformer approximation, KV bytes ≈ 2 × layers × KV heads × head dimension × tokens × bytes/element × sequences. Actual layouts, attention variants and runtime paging vary.",
+        "example": "For 32 layers, 8 KV heads, dimension 128, 4096 tokens, FP16, one sequence: approximately 0.5 GiB.",
+        "tradeoff": "Longer contexts and concurrency both grow cache requirements; GQA reduces KV head count.",
+        "failure": "A model fits at idle but fails with concurrent long requests because KV allocation grows.",
+        "connections": [
+          "models",
+          "local",
+          "production"
+        ]
+      },
+      {
+        "name": "GPU compute kernels",
+        "problem": "Tensor operations execute as optimized kernels on accelerators.",
+        "explain": "Matrix multiplication, normalization and attention use hardware-specific kernels; drivers, runtimes and memory allocators mediate execution. An OS kernel is not the same thing.",
+        "example": "FlashAttention-style kernels reduce attention memory traffic relative to naive materialization.",
+        "tradeoff": "Fastest kernel depends on shapes, numerical format, driver support and target hardware.",
+        "failure": "Unsupported instruction sets or driver mismatches can cause fallback or failures.",
+        "connections": [
+          "stack",
+          "local"
+        ]
+      },
+      {
+        "name": "Quantization",
+        "problem": "Reduce weight representation precision to save memory and often improve throughput.",
+        "explain": "Quantization maps values into fewer bits using a format and scale strategy. Actual accuracy impact varies by model, quantization method and workload; KV cache may have its own precision setting.",
+        "example": "A 4-bit model can fit hardware that cannot serve the uncompressed original.",
+        "tradeoff": "Lower precision is not always faster on every CPU/GPU and can degrade difficult reasoning.",
+        "failure": "A quantized model “works” but regresses on domain test cases: compare side-by-side evaluations.",
+        "connections": [
+          "local",
+          "eval"
+        ]
+      },
+      {
+        "name": "Batching and scheduling",
+        "problem": "Servers improve utilization by combining work across requests.",
+        "explain": "Static batching joins tasks at one point; continuous batching admits and retires requests during decoding. Prefix caching can reuse shared prompt prefixes when safe and supported.",
+        "example": "A busy shared endpoint may improve total tokens/sec while individual p95 latency degrades.",
+        "tradeoff": "Choose scheduling policy against expected arrival rate and tail-latency SLO.",
+        "failure": "Intermittent queue time spikes despite fast kernels indicate serving pressure.",
+        "connections": [
+          "local",
+          "production"
+        ]
+      },
+      {
+        "name": "Local versus remote inference",
+        "problem": "Deployment location shifts responsibility and trust.",
+        "explain": "Local inference gives more deployment control and can reduce data egress, but requires capacity, security and driver maintenance. Remote inference offers managed capacity and model availability but introduces network, cost and policy dependencies.",
+        "example": "Sensitive drafts stay on a hardened workstation; high-volume use might need a dedicated server.",
+        "tradeoff": "Model quality, latency, licensing, costs and data boundary must all be evaluated together.",
+        "failure": "Assuming “local” automatically means secure omits permissions, logs, model provenance and device controls.",
+        "connections": [
+          "local",
+          "eval",
+          "production"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Estimate memory and measure latency",
+      "minutes": 40,
+      "goal": "Create a simple, auditable inference capacity worksheet.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Calculate KV cache",
+          "detail": "Use the formula above for 4K and 16K tokens, one and four sequences. Show units.",
+          "code": "KV_bytes = 2 * layers * kv_heads * head_dim * tokens * bytes_per_element * sequences"
+        },
+        {
+          "title": "Compare request shapes",
+          "detail": "Design A: 1K input + 500 output; Design B: 12K input + 80 output. Predict which impacts prefill vs decode.",
+          "code": ""
+        },
+        {
+          "title": "Collect a baseline",
+          "detail": "If a local server is available, capture time-to-first-token, output tokens/sec, memory use and p95 of repeated requests.",
+          "code": ""
+        },
+        {
+          "title": "Interpret pressure",
+          "detail": "Describe how adding three concurrent users changes your memory and queue risks.",
+          "code": ""
+        }
+      ],
+      "evidence": "A labelled formula with assumptions, a capacity table, and three latency metrics or explicitly documented estimates.",
+      "stretch": "Research a quantized serving format and list compatibility and quality tests before choosing it.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "vllm",
+      "sglang",
+      "llama",
+      "hf_infer"
+    ],
+    "terms": [
+      "prefill",
+      "decode",
+      "KV cache",
+      "quantization",
+      "batching",
+      "GPU kernel",
+      "TTFT",
+      "throughput",
+      "context window"
+    ]
+  },
+  {
+    "id": "local",
+    "title": "04 · Local deployment and serving",
+    "subtitle": "Understand model artifacts, runtimes, HTTP serving, driver boundaries and reproducibility.",
+    "chapters": "04",
+    "pages": "18–19",
+    "stage": "SYSTEMS",
+    "outcomes": [
+      "Explain the components of a self-hosted model server",
+      "Perform a non-destructive deployment plan and runtime probe",
+      "List what must be checked before model/runtime upgrades"
+    ],
+    "pipeline": [
+      "Hardware & driver",
+      "Inference backend",
+      "Model artifact + tokenizer",
+      "Local server endpoint",
+      "Harness/client",
+      "Probes and telemetry"
+    ],
+    "topics": [
+      {
+        "name": "Model file vs runtime",
+        "problem": "Weights alone cannot accept and serve requests.",
+        "explain": "A model artifact contains parameters and metadata; a runtime loads compatible tensors, runs kernels, manages caches and exposes generation functions. A serving layer may add HTTP, queues, multi-tenant admission and telemetry.",
+        "example": "llama.cpp, Ollama, vLLM and SGLang solve overlapping problems but differ in interface, model coverage and scheduling.",
+        "tradeoff": "Replacing runtime changes formats, resource use, templates, optimizations and failure modes.",
+        "failure": "A downloaded model file with no compatible backend is not a running service.",
+        "connections": [
+          "inference",
+          "stack"
+        ]
+      },
+      {
+        "name": "Serving choices",
+        "problem": "Select tools for tasks, not popularity.",
+        "explain": "Desktop apps favor interactive simplicity; single-user runtimes emphasize accessible local inference; throughput servers emphasize scheduling, concurrency and instrumentation. SDK compatibility is another independent dimension.",
+        "example": "One learner can start with Ollama then benchmark a second backend with the same prompt corpus.",
+        "tradeoff": "Compare against fixed workload, GPU memory budget, drivers and actual quality—not screenshots.",
+        "failure": "A server offering a compatible endpoint may still differ in schema and tool-call behavior.",
+        "connections": [
+          "inference",
+          "production",
+          "tools"
+        ]
+      },
+      {
+        "name": "Network and process boundary",
+        "problem": "localhost and remote endpoints have different exposure risks.",
+        "explain": "A loopback-bound inference server is reachable only from its host under normal networking; binding a service publicly increases attack surface. TLS, identity, quotas and gateway authorization matter for remote access.",
+        "example": "A workstation accesses a remote model over HTTPS through an authenticated gateway.",
+        "tradeoff": "Public binding is convenient in a lab but unsafe without access controls and threat modelling.",
+        "failure": "“It responds with curl” does not prove who else can access the endpoint.",
+        "connections": [
+          "eval",
+          "tools"
+        ]
+      },
+      {
+        "name": "Version pinning and compatibility",
+        "problem": "Reproducibility requires tracking more than the model name.",
+        "explain": "Record exact model revision/checksum, quantization, tokenizer/template, runtime version, driver, kernels and launch config. Keep a known-good rollback point.",
+        "example": "A newly updated serving binary changes output structure: compare to a golden request and restore if incompatible.",
+        "tradeoff": "Automatic updates lower upkeep but may introduce unexpected behavior changes.",
+        "failure": "A regression with unchanged model weights may still come from runtime or template drift.",
+        "connections": [
+          "eval",
+          "production"
+        ]
+      },
+      {
+        "name": "Hardware topology",
+        "problem": "Compute and display share limited resources on workstations.",
+        "explain": "On laptops and hybrid-GPU desktops, inference placement must consider device selection, display use, memory copies, power budgets and thermal limits. CPU execution is possible but throughput differs.",
+        "example": "An iGPU handles display while a separate accelerator runs inference, if driver/runtime support permits.",
+        "tradeoff": "Hardware capability does not imply backend kernel support for that precise software revision.",
+        "failure": "A generic GPU query can select a device different from the one expected.",
+        "connections": [
+          "inference",
+          "production"
+        ]
+      },
+      {
+        "name": "Serving health",
+        "problem": "A healthy process can still deliver broken answers.",
+        "explain": "Verify startup, request admission, timeouts, outputs, memory growth, latency, template compatibility and a small known-answer regression set. Monitor both process health and task quality.",
+        "example": "Send one harmless prompt; verify JSON validity, decoded text and response timing.",
+        "tradeoff": "More monitoring helps isolation but requires structured retention and privacy policies.",
+        "failure": "A green /health with malformed output is an application-level failure.",
+        "connections": [
+          "eval"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Deploy-and-probe plan",
+      "minutes": 40,
+      "goal": "Produce a safe, reproducible local-serving runbook; optionally execute on your own sandbox.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Inventory without changing",
+          "detail": "Record OS, architecture, available RAM/VRAM, driver, network boundary and installed runtime; redact host secrets.",
+          "code": ""
+        },
+        {
+          "title": "Choose a backend",
+          "detail": "Compare Ollama and llama.cpp against model formats, hardware and simplicity. State your decision and fallback.",
+          "code": ""
+        },
+        {
+          "title": "Design a smoke test",
+          "detail": "Document an HTTP request, expected output format, max input, timeout and failure classification.",
+          "code": "curl --max-time 15 -s http://127.0.0.1:11434/api/tags"
+        },
+        {
+          "title": "Record rollback",
+          "detail": "List which model artifacts, runtime binary, config and evaluation results must be preserved.",
+          "code": ""
+        }
+      ],
+      "evidence": "Runbook includes current-state evidence, chosen backend, safe binding, smoke test and rollback.",
+      "stretch": "Benchmark one second backend under fixed prompts; compare actual TTFT and quality rather than vendor claims.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "ollama",
+      "ollamaapi",
+      "llama",
+      "lmstudio"
+    ],
+    "terms": [
+      "model artifact",
+      "inference runtime",
+      "serving layer",
+      "HTTP endpoint",
+      "quantization",
+      "health probe",
+      "driver",
+      "rollback"
+    ]
+  },
+  {
+    "id": "context",
+    "title": "05 · Prompt contracts and context",
+    "subtitle": "Learn messages, chat templates, context assembly, structured outputs and budget failure.",
+    "chapters": "05",
+    "pages": "19–20",
+    "stage": "SYSTEMS",
+    "outcomes": [
+      "Trace how system/developer/user/tool data enter a model request",
+      "Design a schema with deterministic validation and retry limits",
+      "Explain why context expansion is not free or always helpful"
+    ],
+    "pipeline": [
+      "Task + policy",
+      "Select evidence and history",
+      "Allocate token budget",
+      "Serialize roles/chat template",
+      "Generate structured reply",
+      "Validate outside model"
+    ],
+    "topics": [
+      {
+        "name": "Instruction hierarchy and data provenance",
+        "problem": "Not every token should carry authority.",
+        "explain": "System/developer guidance, user requests and retrieved/tool content have different trust roles. The harness owns assembly and must preserve source provenance; lower-trust text cannot grant permissions.",
+        "example": "A web page saying “ignore earlier instructions” is evidence to summarize, not a new system message.",
+        "tradeoff": "Concatenating everything as raw text is simple but can erase role/source separation.",
+        "failure": "An injected page triggers a command: check whether untrusted text was promoted into control instructions.",
+        "connections": [
+          "eval",
+          "harness",
+          "rag"
+        ]
+      },
+      {
+        "name": "Chat templates",
+        "problem": "Role structure becomes exact model-facing token sequences.",
+        "explain": "The tokenizer and chat template map role/message boundaries and control markers to input tokens. Tool-call and reasoning formatting are model/runtime-specific; templates must match serving expectations.",
+        "example": "A system prompt concatenated as plain user text may behave differently from correctly marked messages.",
+        "tradeoff": "Changing template can alter safety, tool use and output formatting even with fixed weights.",
+        "failure": "A previously valid tool call fails after a model switch: audit serialization first.",
+        "connections": [
+          "models",
+          "local"
+        ]
+      },
+      {
+        "name": "Context window vs useful evidence",
+        "problem": "Maximum tokens and effective task attention are different.",
+        "explain": "A context window is the upper bound of model-visible tokens. The useful subset depends on relevance, ordering, attention behavior and output allocation. Pasting entire repositories often reduces signal.",
+        "example": "A coding task benefits more from two relevant files than from thousands of unrelated lines.",
+        "tradeoff": "Summarization saves tokens but may discard constraints; retrieval needs relevance checks.",
+        "failure": "Correct evidence exists in context but the model misses it: test ordering and chunk selection.",
+        "connections": [
+          "rag",
+          "inference"
+        ]
+      },
+      {
+        "name": "Structured outputs",
+        "problem": "A request for JSON is not a validated typed object.",
+        "explain": "Define an output schema, validate generated data outside the model, handle missing/extra fields and bound retries. Tool argument schemas and final output schemas serve different consumers.",
+        "example": "Return {\"status\":\"ok\",\"count\":3} only when field types pass a deterministic validator.",
+        "tradeoff": "Strict validation adds rejection/retry costs but reduces silent downstream corruption.",
+        "failure": "Invalid values reaching a database indicate missing enforcement after generation.",
+        "connections": [
+          "harness",
+          "tools",
+          "eval"
+        ]
+      },
+      {
+        "name": "Truncation and compression",
+        "problem": "Context budgets must include instructions, history, tools and output.",
+        "explain": "Trimming naive “oldest first” can remove decisions or safety constraints; selective summarization and state checkpoints preserve essential facts. History is not persistent memory unless saved and restored.",
+        "example": "Keep an architecture decision record while compacting old chat turns.",
+        "tradeoff": "Compression improves fit but creates information-loss risk; measure task regressions.",
+        "failure": "Agent repeats already-resolved work after compaction: inspect what state was retained.",
+        "connections": [
+          "harness",
+          "rag"
+        ]
+      },
+      {
+        "name": "Prompt caching and cost",
+        "problem": "Stable prefixes may be reused to reduce repeated computation where supported.",
+        "explain": "Prefix caching is a serving/runtime capability with exact-match and policy constraints. Small changes to stable instructions or tool catalogs can invalidate cache reuse.",
+        "example": "Order tools consistently rather than shuffling their definitions every request.",
+        "tradeoff": "Caching improves latency/cost but requires isolation to avoid cross-tenant leakage.",
+        "failure": "First-token latency increases after a harmless prompt refactor: check cache hit changes.",
+        "connections": [
+          "inference",
+          "production"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Write a task contract and adversarial case",
+      "minutes": 35,
+      "goal": "Design a prompt contract that keeps evidence separate from authority.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Define an output",
+          "detail": "Use a short two-field JSON summary with evidence IDs. Define exact required keys and maximum lengths.",
+          "code": "{\"claim\":\"string\",\"evidence_ids\":[\"id\"]}"
+        },
+        {
+          "title": "Mark trust",
+          "detail": "Write a sample system task, user request and untrusted retrieved paragraph; identify which can authorize action.",
+          "code": ""
+        },
+        {
+          "title": "Design validator",
+          "detail": "Define rejection conditions for missing evidence IDs, unexpected keys and invalid field types.",
+          "code": ""
+        },
+        {
+          "title": "Try an injection",
+          "detail": "Put “Ignore the schema” inside retrieved text. Explain the deterministic boundary that blocks the escalation.",
+          "code": ""
+        }
+      ],
+      "evidence": "One explicit contract, one lower-trust attack case and a separate validator checklist.",
+      "stretch": "Add a context-budget table with reserved output, instruction and evidence token allocations.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "hf_infer",
+      "openagents",
+      "promptfoo"
+    ],
+    "terms": [
+      "chat template",
+      "context window",
+      "system message",
+      "tool result",
+      "schema validation",
+      "truncation",
+      "prefix cache",
+      "provenance"
+    ]
+  },
+  {
+    "id": "harness",
+    "title": "06 · Agents, harnesses and patterns",
+    "subtitle": "Turn model proposals into bounded, observable workflows rather than autonomous guesses.",
+    "chapters": "06, 06A",
+    "pages": "20–25",
+    "stage": "BUILD",
+    "outcomes": [
+      "Define model vs agent vs harness precisely",
+      "Choose fixed workflow, routing, ReAct or planner patterns rationally",
+      "Specify approval, recovery, termination and budgets"
+    ],
+    "pipeline": [
+      "Receive task",
+      "Create state and limits",
+      "Pick workflow or agent loop",
+      "Ask model and/or tools",
+      "Check policy and evidence",
+      "Persist result / escalate"
+    ],
+    "topics": [
+      {
+        "name": "Model, agent and harness",
+        "problem": "Differentiate generation, deciding, and execution.",
+        "explain": "A model produces candidate tokens. An agent is a goal-directed process that uses model decisions and tools. A harness provides the surrounding loop: context, tool mediation, limits, retries, logging, permissions, state and result verification.",
+        "example": "Same model in two coding agents can behave differently because their harnesses select files, run tests and seek approval differently.",
+        "tradeoff": "Changing a model does not automatically fix missing rollback or excessive tool access.",
+        "failure": "Repeated tool calls without a stop rule indicate loop governance failure.",
+        "connections": [
+          "stack",
+          "tools",
+          "eval"
+        ]
+      },
+      {
+        "name": "Fixed workflows before open loops",
+        "problem": "Not every problem needs autonomy.",
+        "explain": "A deterministic pipeline is easier to test, audit and cost-control. Routing lets one of several predefined paths run. Dynamic agent loops are useful when next steps cannot be enumerated safely.",
+        "example": "Invoice OCR → validate → human approve is a workflow; exploratory bug diagnosis may need a bounded agent.",
+        "tradeoff": "Agent flexibility raises variance, prompt-injection exposure and nontermination risk.",
+        "failure": "A simple extraction app using a free-running agent is probably over-engineered.",
+        "connections": [
+          "eval",
+          "production"
+        ]
+      },
+      {
+        "name": "ReAct and plan-execute",
+        "problem": "Agents can reason about next actions, then observe outcomes.",
+        "explain": "In a ReAct-style loop the model alternates tool selection and observation. Planner-executor separates high-level plan from actions and may introduce independent verification. Neither pattern guarantees correctness.",
+        "example": "The executor calls test runner after editing; verifier compares diff and test exit codes.",
+        "tradeoff": "Planning can improve multi-step coordination but adds latency and plan-drift concerns.",
+        "failure": "An agent follows stale plan despite changed state: require replanning gates and fresh observations.",
+        "connections": [
+          "tools",
+          "context"
+        ]
+      },
+      {
+        "name": "State, recovery and resumability",
+        "problem": "A resilient harness must survive partial progress.",
+        "explain": "Persist task IDs, completed actions, approvals, observations and idempotency keys. Retry only safe operations; external side effects may not be repeatable. Keep partial failures visible.",
+        "example": "An API create request times out after sending: query by idempotency key before retrying.",
+        "tradeoff": "Durable state costs storage and complexity but avoids duplicate side effects.",
+        "failure": "Duplicate VMs appear after a timeout: likely at-least-once execution without reconciliation.",
+        "connections": [
+          "production",
+          "eval"
+        ]
+      },
+      {
+        "name": "Budgets and termination",
+        "problem": "Bound both resource consumption and authority.",
+        "explain": "Cap maximum steps, wall time, token budget, tool retries and risk categories. Define what counts as success, failure or escalation. A verifier should inspect actual outputs, not generated claims.",
+        "example": "Stop a coding loop after three repair attempts and report failing tests.",
+        "tradeoff": "Tighter budgets improve predictability but may reject legitimate complex tasks.",
+        "failure": "A task spins indefinitely despite no new observations: terminate and surface failure.",
+        "connections": [
+          "eval",
+          "production"
+        ]
+      },
+      {
+        "name": "Coding harness anatomy",
+        "problem": "A code-editing agent is an engineering control system.",
+        "explain": "Inputs include repo state and task spec; tools read/edit code and run tests; approvals gate sensitive execution; checkpoints enable rollback; output is a diff, tests and review evidence.",
+        "example": "A TUI may show a patch while harness maintains sandbox state and collected test results.",
+        "tradeoff": "Broad filesystem access speeds work but increases blast radius; scope to workspace and commands.",
+        "failure": "A patch exists but branch checks fail: output cannot be called complete.",
+        "connections": [
+          "stack",
+          "eval"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Design a bounded agent as a state machine",
+      "minutes": 50,
+      "goal": "Create a tool-using agent design that cannot silently exceed budget or permissions.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Define the task",
+          "detail": "Use “repair a small Markdown link list” in a sandbox directory. State allowed edits and stop conditions.",
+          "code": ""
+        },
+        {
+          "title": "Draw states",
+          "detail": "Define PLAN, READ, PROPOSE, APPROVE, APPLY, TEST, DONE, FAILED and allowed transitions.",
+          "code": "PLAN -> READ -> PROPOSE -> APPROVE -> APPLY -> TEST -> DONE"
+        },
+        {
+          "title": "Specify limits",
+          "detail": "Set max iterations, tools, wall time and user approval required before external writes.",
+          "code": ""
+        },
+        {
+          "title": "Simulate failure",
+          "detail": "What happens when tests fail twice or a file changes concurrently? Specify reconcile/retry/abort.",
+          "code": ""
+        }
+      ],
+      "evidence": "A state diagram, policy table, failure transition and unambiguous definition of DONE.",
+      "stretch": "Compare a fixed two-tool workflow to your agent and justify the autonomy premium.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "anthropic",
+      "agents",
+      "openagents",
+      "langgraph",
+      "codex",
+      "openhands"
+    ],
+    "terms": [
+      "agent",
+      "harness",
+      "ReAct",
+      "orchestration",
+      "planner-executor",
+      "idempotency",
+      "checkpoint",
+      "human-in-the-loop",
+      "termination condition"
+    ]
+  },
+  {
+    "id": "tools",
+    "title": "07 · Tools, MCP, APIs and A2A",
+    "subtitle": "Connect systems with explicit contracts and identity boundaries.",
+    "chapters": "07, 07A",
+    "pages": "25–28",
+    "stage": "BUILD",
+    "outcomes": [
+      "Distinguish tool call, HTTP API, MCP, SDK and A2A",
+      "Explain who validates arguments and authorizes operations",
+      "Design a narrow, observable tool boundary"
+    ],
+    "pipeline": [
+      "Harness discovers capability",
+      "Model proposes typed tool call",
+      "Harness checks permissions",
+      "Client sends RPC/API request",
+      "Tool executes in its principal",
+      "Result returns as untrusted evidence"
+    ],
+    "topics": [
+      {
+        "name": "Tool calling vs direct execution",
+        "problem": "The model proposes arguments; an executor makes effects real.",
+        "explain": "A tool description/schema helps the model form a candidate action. The host/harness must validate values, enforce identity, authorize effects and handle error paths before invoking code.",
+        "example": "A proposed “search_file” call is read-only; a proposed “delete_file” needs explicit scope and approval.",
+        "tradeoff": "Tool availability is not permission; model-generated arguments are still untrusted.",
+        "failure": "A tool executes outside allowed path: investigate executor scope and path checks.",
+        "connections": [
+          "harness",
+          "eval"
+        ]
+      },
+      {
+        "name": "HTTP APIs, SDKs and CLI",
+        "problem": "These are access mechanisms, not agent protocols by themselves.",
+        "explain": "HTTP APIs expose network operations; SDKs package client behavior; CLIs provide executable commands. An agent harness can wrap any of these as tools, but then owns timeout, schema, retries and credentials.",
+        "example": "The same backup service can be invoked through a Python SDK or a CLI wrapper.",
+        "tradeoff": "CLI wrappers may be easy to start but require robust quoting and environment isolation.",
+        "failure": "Shell injection through concatenated arguments is a tool design failure, not a tokenizer issue.",
+        "connections": [
+          "stack",
+          "local"
+        ]
+      },
+      {
+        "name": "MCP host, client and server",
+        "problem": "MCP standardizes discovery and invocation of external capabilities.",
+        "explain": "The host is the AI application, clients manage connections, servers expose tools, resources and prompts. MCP does not automatically enforce business authorization or make returned content trustworthy.",
+        "example": "An editor host connects to a read-only repository MCP server exposing file resources.",
+        "tradeoff": "Standard transport improves interoperability but creates credential, scope and trust decisions.",
+        "failure": "A newly discovered MCP tool receiving all permissions by default is unsafe.",
+        "connections": [
+          "harness",
+          "eval"
+        ]
+      },
+      {
+        "name": "MCP versioning matters",
+        "problem": "Protocol behavior changes across published revisions.",
+        "explain": "As of the 2026-07-28 specification, the core protocol adopts stateless requests with per-request metadata and new routing headers. Implementations pinned to older SDKs can still require different initialization/session patterns; check negotiated compatibility before copying snippets.",
+        "example": "The “initialize” flow from an older tutorial may not match a newer stateless server.",
+        "tradeoff": "Protocol upgrades can break clients, caches, auth and transports independently of model behavior.",
+        "failure": "A connection fails after SDK upgrade: inspect protocol revision and capability support.",
+        "connections": [
+          "local",
+          "production"
+        ]
+      },
+      {
+        "name": "A2A vs MCP",
+        "problem": "Inter-agent delegation differs from calling a specific tool.",
+        "explain": "MCP focuses on application-to-capability interaction. A2A describes collaboration/delegation between agents with task-oriented discovery and messaging. Neither is inherently required for a single-agent system.",
+        "example": "Use MCP to read a document; use A2A when a specialized external agent must own a delegated subtask.",
+        "tradeoff": "Adding an A2A hop increases coordination, privacy and reliability complexity.",
+        "failure": "A simple database lookup routed to a second agent creates unnecessary failure boundaries.",
+        "connections": [
+          "harness",
+          "production"
+        ]
+      },
+      {
+        "name": "Least privilege and tool provenance",
+        "problem": "Identity, data integrity and observability must survive the hop.",
+        "explain": "Separate connection identity, user delegation, service privileges and per-operation authorization. Log correlation IDs, sanitized arguments and outcomes. Treat resource content as lower-trust data.",
+        "example": "A tool returns “Run sudo” inside a log result: the harness may quote it but cannot execute it on that basis.",
+        "tradeoff": "Stricter scopes reduce blast radius but can limit unattended automation.",
+        "failure": "Audit logs show successful model tool selection but no authorized tool result: distinguish proposal from execution.",
+        "connections": [
+          "eval"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Specify a minimal read-only tool contract",
+      "minutes": 50,
+      "goal": "Design an interoperable tool without granting it broad filesystem access.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Choose one capability",
+          "detail": "Define get_status(service_name) with allowed names, output fields and errors.",
+          "code": "{\"name\":\"get_status\",\"arguments\":{\"service_name\":\"example\"}}"
+        },
+        {
+          "title": "Define scope",
+          "detail": "Bind authorized service names and credentials in the host, not inside model text.",
+          "code": ""
+        },
+        {
+          "title": "Write negative cases",
+          "detail": "Test unknown service, malformed arguments, denied user and timeout. Specify results.",
+          "code": ""
+        },
+        {
+          "title": "Map MCP parties",
+          "detail": "Identify host, client, server and who owns authorization in your design.",
+          "code": ""
+        }
+      ],
+      "evidence": "A tool schema, allowlist/identity decision, four negative tests and a request/response trace.",
+      "stretch": "Add a delegated-task option and explain why A2A is or is not justified.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "mcp",
+      "mcprelease",
+      "a2a",
+      "openagents"
+    ],
+    "terms": [
+      "tool schema",
+      "MCP host",
+      "MCP client",
+      "MCP server",
+      "resource",
+      "API",
+      "SDK",
+      "A2A",
+      "authorization"
+    ]
+  },
+  {
+    "id": "rag",
+    "title": "08 · Retrieval and memory",
+    "subtitle": "Ground answers in retrieved evidence and distinguish vector search from durable state.",
+    "chapters": "08",
+    "pages": "28–29",
+    "stage": "BUILD",
+    "outcomes": [
+      "Describe a RAG pipeline end to end",
+      "Differentiate embeddings, vector search, reranking and generated citation",
+      "Explain why retrieval quality is a separate evaluation target"
+    ],
+    "pipeline": [
+      "Ingest + chunk",
+      "Embed / index",
+      "Query and retrieve",
+      "Rerank / filter",
+      "Assemble grounded context",
+      "Generate + verify citations"
+    ],
+    "topics": [
+      {
+        "name": "RAG is evidence injection",
+        "problem": "Retrieval adds relevant facts without changing the model weights.",
+        "explain": "A retrieval system selects documents or chunks at query time, then passes relevant passages to generation with provenance. It helps answer time-sensitive or private-domain questions but can still retrieve bad evidence.",
+        "example": "Use a versioned policy document in context rather than training that text into weights.",
+        "tradeoff": "RAG adds indexing, permissions, relevance and source-version management.",
+        "failure": "A confidently wrong answer can originate from irrelevant passages or faulty synthesis.",
+        "connections": [
+          "models",
+          "context"
+        ]
+      },
+      {
+        "name": "Chunking and metadata",
+        "problem": "Document segmentation determines what can be found.",
+        "explain": "Split documents along meaningful boundaries, preserve source IDs, titles, timestamps and access controls. Tiny chunks lose context; giant chunks add noise and prompt cost.",
+        "example": "Chunk each API section with heading and version in metadata so search retrieves the right revision.",
+        "tradeoff": "Chunk overlap improves continuity but increases index size and duplicate retrieval.",
+        "failure": "Answer contains fragments without definitions: chunk granularity may be too small.",
+        "connections": [
+          "context",
+          "eval"
+        ]
+      },
+      {
+        "name": "Embeddings and hybrid retrieval",
+        "problem": "Similarity is not the same as truth or relevance.",
+        "explain": "Embeddings represent texts in a vector space, enabling approximate semantic search. Keyword/BM25-style retrieval preserves exact tokens, identifiers and error codes; hybrid search can combine both.",
+        "example": "A precise error string is often better found by lexical search than vague semantic similarity.",
+        "tradeoff": "ANN/vector indexes add approximate recall tradeoffs and resource costs.",
+        "failure": "Relevant file missed despite exact error string: check lexical indexing and filters.",
+        "connections": [
+          "models",
+          "production"
+        ]
+      },
+      {
+        "name": "Reranking and grounding",
+        "problem": "Selecting the best evidence is a separate stage from writing.",
+        "explain": "Rerankers score candidate passages for a query; filters can enforce recency, authorization and source quality. The generator should cite evidence IDs that are verified against the retrieved set.",
+        "example": "An answer claims “policy changed yesterday” only if the retrieved revision supports it.",
+        "tradeoff": "Extra reranking may improve precision but adds latency and cost.",
+        "failure": "A citation links to a document that does not contain the claim: validate source spans.",
+        "connections": [
+          "eval"
+        ]
+      },
+      {
+        "name": "Memory types",
+        "problem": "Chat history, working state and durable memory are distinct.",
+        "explain": "Conversation context is temporary model input. Task state stores workflow progress. Long-term memory stores explicit durable facts under retention and consent rules. A vector store alone is not a reliable transaction log.",
+        "example": "Store completed deployment IDs in a database rather than hoping the LLM remembers them from chat.",
+        "tradeoff": "Persistence improves continuity but can become stale, private or contaminated.",
+        "failure": "Agent repeats an operation after restart: persistent state and reconciliation may be missing.",
+        "connections": [
+          "harness",
+          "eval"
+        ]
+      },
+      {
+        "name": "RAG evaluation",
+        "problem": "Separate search quality, answer quality and authorization.",
+        "explain": "Measure retrieval recall@k on labeled queries, precision/relevance, groundedness of claims and citation support. Add permission-aware negative cases; high search recall alone does not guarantee good answers.",
+        "example": "A benchmark contains question, gold supporting chunk, expected answer and forbidden sources.",
+        "tradeoff": "Better retrieval can increase model prefill and cost; tune end-to-end metrics.",
+        "failure": "A high automatic answer score with wrong citations reveals an evaluation gap.",
+        "connections": [
+          "eval",
+          "production"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Build a tiny evidence-grounded retrieval exercise",
+      "minutes": 45,
+      "goal": "Use three synthetic documents to audit selection, citations and access control.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Create corpus",
+          "detail": "Write 3 short fictitious versioned policies; give each an ID and owner.",
+          "code": "doc_id,version,allowed_roles,text\nP1,v1,all,Sample policy one\nP2,v2,staff,Sample policy two"
+        },
+        {
+          "title": "Author questions",
+          "detail": "Write one exact-ID lookup, one paraphrase and one access-denied query.",
+          "code": ""
+        },
+        {
+          "title": "Specify retrieval",
+          "detail": "Choose lexical or semantic retrieval per query and state why; document candidate IDs.",
+          "code": ""
+        },
+        {
+          "title": "Verify claims",
+          "detail": "For each answer, cite a source span and mark unsupported or forbidden outputs as failures.",
+          "code": ""
+        }
+      ],
+      "evidence": "A 3-row corpus, 3 retrieval judgments and groundedness/permission checks.",
+      "stretch": "Add two near-duplicate versions and test whether timestamps/source IDs resolve conflicts.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "rag",
+      "ragas",
+      "promptfoo"
+    ],
+    "terms": [
+      "RAG",
+      "embedding search",
+      "hybrid search",
+      "chunking",
+      "reranking",
+      "recall@k",
+      "citation grounding",
+      "durable memory"
+    ]
+  },
+  {
+    "id": "eval",
+    "title": "09 · Evaluation, security and trust",
+    "subtitle": "Prove outcomes and enforce boundaries when model text, tools and data are adversarial.",
+    "chapters": "09, 10",
+    "pages": "29–32",
+    "stage": "PROVE",
+    "outcomes": [
+      "Design reproducible quality and regression evals",
+      "Differentiate prompt injection from authorized instruction",
+      "Enforce least privilege, approvals and failure isolation"
+    ],
+    "pipeline": [
+      "Create labeled test set",
+      "Run task via harness",
+      "Record model + tool traces",
+      "Score quality and safety",
+      "Inspect failures",
+      "Gate deployment and monitor"
+    ],
+    "topics": [
+      {
+        "name": "Evaluations vs demos",
+        "problem": "One success story cannot estimate reliability.",
+        "explain": "An evaluation is a repeatable measurement over representative cases with specified scoring and documented inputs. Use held-out scenarios, regression sets, negative tests and human review where subjective judgment matters.",
+        "example": "A coding agent must pass unit tests, diff checks, authorization checks and failure scenarios.",
+        "tradeoff": "More test cases cost time; unrepresentative cases create false confidence.",
+        "failure": "A model upgrade “feels better” but breaks a rare permission case: add regression evidence.",
+        "connections": [
+          "harness",
+          "production"
+        ]
+      },
+      {
+        "name": "Metric choice",
+        "problem": "Accuracy, groundedness, latency and cost are separate axes.",
+        "explain": "A correct answer can be too slow, an inexpensive answer can violate policy, and a fast answer can cite wrong evidence. Report dimensions separately and tie thresholds to business needs.",
+        "example": "For extraction measure field correctness; for RAG measure citation support; for agents measure task completion and unsafe side effects.",
+        "tradeoff": "Aggregating everything into one score hides unacceptable tails.",
+        "failure": "Average quality high but sensitive cases fail: use slice-based metrics.",
+        "connections": [
+          "rag",
+          "inference",
+          "production"
+        ]
+      },
+      {
+        "name": "Prompt injection is a trust boundary attack",
+        "problem": "Untrusted content tries to become instructions.",
+        "explain": "Web pages, repo files, tool results and retrieved documents may contain malicious instructions. Defensive architecture limits privileges and data flow regardless of whether the model obeys hostile content.",
+        "example": "A README tells the agent to send secrets to a URL. The harness treats it as untrusted document text.",
+        "tradeoff": "A prompt saying “ignore injections” helps but cannot replace scoped tools and output validation.",
+        "failure": "If lower-trust text causes privilege escalation, investigate tool permissions and workflow policy.",
+        "connections": [
+          "context",
+          "tools"
+        ]
+      },
+      {
+        "name": "Threat model of an agent",
+        "problem": "External side effects amplify small mistakes.",
+        "explain": "Map assets, identities, entry points, untrusted surfaces, trust boundaries and allowed operations. Consider exfiltration, tool misuse, resource exhaustion, output corruption and supply-chain content.",
+        "example": "A web-browsing agent with network and filesystem access needs a clearly defined data egress policy.",
+        "tradeoff": "Sandboxing isolates environments but does not by itself guarantee no network exfiltration.",
+        "failure": "The agent performed a forbidden write even though its chat response looked harmless.",
+        "connections": [
+          "harness",
+          "production"
+        ]
+      },
+      {
+        "name": "Human approval and deterministic gates",
+        "problem": "Approval must happen at the action boundary.",
+        "explain": "Separate “model asked user” from “executor blocked until authorized.” Require approval for destructive changes, credential access or external effects; log who authorized precisely what.",
+        "example": "A tool call with an unsafe path is denied even when the model says it is urgent.",
+        "tradeoff": "More gates reduce risk but can add latency and user fatigue; apply risk tiers.",
+        "failure": "An approve dialog appears after the write: the approval point is incorrectly placed.",
+        "connections": [
+          "tools",
+          "harness"
+        ]
+      },
+      {
+        "name": "Observability and incident proof",
+        "problem": "Trace what ran, not what the assistant claims ran.",
+        "explain": "Log correlation IDs, model/version, budgets, non-sensitive input metadata, tool attempts, policy decisions, validation and final outcome. Define retention and redaction; secret values should not enter routine logs.",
+        "example": "A failed job can be reconstructed without printing credentials or full private documents.",
+        "tradeoff": "Detailed telemetry increases risk if it retains prompts, secrets and retrieved private data.",
+        "failure": "Without task-to-tool trace correlation, reliability incidents become guesswork.",
+        "connections": [
+          "production",
+          "stack"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Red-team a synthetic agent workflow",
+      "minutes": 50,
+      "goal": "Create an attack/defense table grounded in the architecture rather than slogans.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "Declare trust map",
+          "detail": "Mark user instruction, web content, tool responses and tool executor authority.",
+          "code": ""
+        },
+        {
+          "title": "Write 3 attacks",
+          "detail": "Create harmless synthetic prompt-injection strings in a fake web page, repo README and tool response.",
+          "code": ""
+        },
+        {
+          "title": "Design controls",
+          "detail": "For each attack identify prevention, detection, audit evidence and permitted fallback.",
+          "code": ""
+        },
+        {
+          "title": "Define evaluation",
+          "detail": "Set at least 5 pass/fail cases: correct task, denial, invalid input, timeout and attempted exfiltration.",
+          "code": ""
+        }
+      ],
+      "evidence": "An attack matrix with three explicit trust boundaries and at least five measurable regression cases.",
+      "stretch": "Compare failure modes for a no-tools chatbot versus a privileged coding agent.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "owasp",
+      "nist",
+      "promptfoo",
+      "inspect",
+      "otel"
+    ],
+    "terms": [
+      "evaluation harness",
+      "regression test",
+      "prompt injection",
+      "sandbox",
+      "least privilege",
+      "approval gate",
+      "audit trace",
+      "threat model"
+    ]
+  },
+  {
+    "id": "production",
+    "title": "10 · Production decisions and capstones",
+    "subtitle": "Choose architectures using evidence; operate within latency, cost, safety and lifecycle constraints.",
+    "chapters": "11–14, 16",
+    "pages": "32–38, 44–46",
+    "stage": "PROVE",
+    "outcomes": [
+      "Compare two plausible system designs against one workload",
+      "Define SLOs, cost and failure budgets with measured evidence",
+      "Complete a reviewable capstone with reproducible rollback"
+    ],
+    "pipeline": [
+      "Define user need + risk",
+      "Measure workload",
+      "Compare architecture options",
+      "Pilot and evaluate",
+      "Gate rollout",
+      "Monitor and reconcile"
+    ],
+    "topics": [
+      {
+        "name": "Architecture is a trade-off ledger",
+        "problem": "No tool or model is “best” independently of requirements.",
+        "explain": "Describe workload, data boundary, concurrency, output quality, latency targets, hardware and cost before choosing a model, runtime or harness. Keep assumptions and rollback explicit.",
+        "example": "A low-volume internal assistant may value control and simplicity over maximal serving throughput.",
+        "tradeoff": "A superior benchmark result does not guarantee better task completion or operating cost.",
+        "failure": "A design recommendation with no workload assumptions is unsupported.",
+        "connections": [
+          "local",
+          "eval",
+          "harness"
+        ]
+      },
+      {
+        "name": "SLOs and tail behavior",
+        "problem": "Averages can hide the user experience.",
+        "explain": "Define SLI measurements such as TTFT, end-to-end p95 latency, failure rate, valid tool-call rate and grounded-answer proportion. Assign thresholds and measurement periods; track separate slices.",
+        "example": "“95% of simple requests finish within 4 seconds” is more actionable than “fast enough.”",
+        "tradeoff": "Stricter SLOs increase capacity costs and may motivate queue limits or caching.",
+        "failure": "Mean latency stable while p95 deteriorates: inspect bursts, queues and slow-tool tails.",
+        "connections": [
+          "inference",
+          "eval"
+        ]
+      },
+      {
+        "name": "Cost and capacity model",
+        "problem": "Tokens, compute and engineering time are all resources.",
+        "explain": "Estimate input/output token cost, model memory, utilization, batch behavior, storage, energy, operator time, licensing and reliability cost. Local vs API break-even changes by volume and quality.",
+        "example": "Budget 1000 daily requests with measured token mix and benchmark latency at real concurrency.",
+        "tradeoff": "A cheaper inference endpoint may cost more overall if it requires retries or human rework.",
+        "failure": "Reported cost excludes failed attempts, context growth or engineer operations.",
+        "connections": [
+          "inference",
+          "local"
+        ]
+      },
+      {
+        "name": "Deployment gates and rollback",
+        "problem": "Reproducible change requires before/after proof.",
+        "explain": "Capture current state, pin dependencies and model artifacts, define measurable acceptance, stage rollout, observe negative cases and preserve rollback. A claimed successful deploy without tested output is incomplete.",
+        "example": "Pin runtime/model/template combination and run golden tool-call tests before wider exposure.",
+        "tradeoff": "Fast auto-rollouts reduce friction but amplify regression risk without gates.",
+        "failure": "A live endpoint is healthy but wrong model version is loaded: add immutable version evidence.",
+        "connections": [
+          "local",
+          "eval"
+        ]
+      },
+      {
+        "name": "Capstone requirements",
+        "problem": "A portfolio proves integrated engineering, not isolated prompts.",
+        "explain": "Ship a bounded tool assistant, grounded document QA, safe coding workflow or inference benchmark. Include architecture diagram, threat model, evaluation dataset, metrics, failures and rollback.",
+        "example": "A policy assistant returns supported citations and denies unauthorized document retrieval.",
+        "tradeoff": "Breadth helps but evidence quality matters more than framework count.",
+        "failure": "A demo lacking logs, tests and failure cases is a prototype, not production proof.",
+        "connections": [
+          "harness",
+          "rag",
+          "eval"
+        ]
+      },
+      {
+        "name": "Specialization and continued learning",
+        "problem": "The goal is defensible judgment, not memorizing packages.",
+        "explain": "After foundations, specialize in model internals, inference systems, orchestration, retrieval, safety or operations. Keep an architecture decision record and revisit it when model/tool versions change.",
+        "example": "Compare two serving strategies and explain where one stops being economically or operationally valid.",
+        "tradeoff": "Newer tools can alter options; focus on stable interfaces, measurement and threat boundaries.",
+        "failure": "Confidence without measurement or rollback is a signal to revisit assumptions.",
+        "connections": [
+          "stack",
+          "models",
+          "tools"
+        ]
+      }
+    ],
+    "lab": {
+      "title": "Architecture design defense",
+      "minutes": 70,
+      "goal": "Complete a miniature capstone specification with evidence and explicit uncertainty.",
+      "setup": "Browser + text editor; optional Python 3",
+      "steps": [
+        {
+          "title": "State the use case",
+          "detail": "Design an internal read-only document assistant with 30 concurrent users, versioned docs and restricted access.",
+          "code": ""
+        },
+        {
+          "title": "Compare two designs",
+          "detail": "A: managed model API + RAG; B: local-serving stack + RAG. Compare p95, data boundaries, costs, maintainability and quality.",
+          "code": ""
+        },
+        {
+          "title": "Add gates",
+          "detail": "Define 6 evaluation cases, 3 security denial cases, SLOs, readiness checks and rollback steps.",
+          "code": ""
+        },
+        {
+          "title": "Make a decision",
+          "detail": "Write a one-page ADR with hypotheses, evidence needed, chosen design and rejected alternative.",
+          "code": ""
+        }
+      ],
+      "evidence": "A reviewed ADR, 2-option decision matrix, test plan, explicit unknowns and rollback procedure.",
+      "stretch": "Present the ADR to a peer who may reject the design; record their objections and update one assumption.",
+      "safety": "Use synthetic inputs only; do not expose real API keys, internal files, or personal data."
+    },
+    "resources": [
+      "otel",
+      "inspect",
+      "vllm",
+      "nist",
+      "anthropic"
+    ],
+    "terms": [
+      "SLO",
+      "SLI",
+      "p95 latency",
+      "error budget",
+      "ADR",
+      "rollback",
+      "canary",
+      "capacity planning",
+      "observability"
+    ]
+  }
+]

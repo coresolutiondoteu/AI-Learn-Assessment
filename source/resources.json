@@ -1,0 +1,170 @@
+[
+  {
+    "id": "transformers",
+    "title": "Hugging Face LLM Course",
+    "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
+    "note": "Introduction to Transformers, tokens and model tasks"
+  },
+  {
+    "id": "hf_infer",
+    "title": "Hugging Face generation tutorial",
+    "url": "https://huggingface.co/docs/transformers/llm_tutorial",
+    "note": "Generation, sampling and inference basics"
+  },
+  {
+    "id": "micrograd",
+    "title": "Karpathy micrograd",
+    "url": "https://github.com/karpathy/micrograd",
+    "note": "Build intuition for gradients and training"
+  },
+  {
+    "id": "tokenizer",
+    "title": "OpenAI tiktoken",
+    "url": "https://github.com/openai/tiktoken",
+    "note": "Tokenization examples and implementation"
+  },
+  {
+    "id": "nanochat",
+    "title": "Karpathy nanochat",
+    "url": "https://github.com/karpathy/nanochat",
+    "note": "Readable small training and inference system"
+  },
+  {
+    "id": "ollama",
+    "title": "Ollama quickstart",
+    "url": "https://docs.ollama.com/quickstart",
+    "note": "Local models, CLI and model setup"
+  },
+  {
+    "id": "ollamaapi",
+    "title": "Ollama API reference",
+    "url": "https://docs.ollama.com/api/introduction",
+    "note": "HTTP model-serving examples"
+  },
+  {
+    "id": "llama",
+    "title": "llama.cpp",
+    "url": "https://github.com/ggml-org/llama.cpp",
+    "note": "Local inference and quantization"
+  },
+  {
+    "id": "vllm",
+    "title": "vLLM documentation",
+    "url": "https://docs.vllm.ai/en/latest/",
+    "note": "Continuous batching and serving architecture"
+  },
+  {
+    "id": "sglang",
+    "title": "SGLang",
+    "url": "https://github.com/sgl-project/sglang",
+    "note": "Serving systems and advanced inference"
+  },
+  {
+    "id": "agents",
+    "title": "Hugging Face Agents Course",
+    "url": "https://huggingface.co/learn/agents-course/unit0/introduction",
+    "note": "Agent concepts, tools, and loops"
+  },
+  {
+    "id": "anthropic",
+    "title": "Building effective agents",
+    "url": "https://www.anthropic.com/research/building-effective-agents",
+    "note": "Workflow-versus-agent design patterns"
+  },
+  {
+    "id": "codex",
+    "title": "OpenAI Codex repository",
+    "url": "https://github.com/openai/codex",
+    "note": "Inspect a production coding-agent interface and harness"
+  },
+  {
+    "id": "openagents",
+    "title": "OpenAI Agents SDK guide",
+    "url": "https://developers.openai.com/api/docs/guides/agents/sdk",
+    "note": "Agent construction, state and tool boundaries"
+  },
+  {
+    "id": "langgraph",
+    "title": "LangGraph documentation",
+    "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+    "note": "Stateful graph and human-in-the-loop patterns"
+  },
+  {
+    "id": "mcp",
+    "title": "MCP specification, 2026-07-28",
+    "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "note": "Current protocol version; features vary by SDK version"
+  },
+  {
+    "id": "mcprelease",
+    "title": "MCP July 2026 change summary",
+    "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+    "note": "Stateless protocol core and changes from older implementations"
+  },
+  {
+    "id": "a2a",
+    "title": "Agent2Agent protocol",
+    "url": "https://a2a-protocol.org/v1.0.0/specification",
+    "note": "Inter-agent interoperability"
+  },
+  {
+    "id": "rag",
+    "title": "RAG from scratch",
+    "url": "https://github.com/langchain-ai/rag-from-scratch",
+    "note": "Retrieval, chunking and generation examples"
+  },
+  {
+    "id": "ragas",
+    "title": "Ragas",
+    "url": "https://docs.ragas.io/en/latest/concepts/metrics/available_metrics/",
+    "note": "RAG evaluation metric families"
+  },
+  {
+    "id": "promptfoo",
+    "title": "Promptfoo documentation",
+    "url": "https://www.promptfoo.dev/docs/intro/",
+    "note": "Regression tests for prompts and models"
+  },
+  {
+    "id": "inspect",
+    "title": "Inspect AI",
+    "url": "https://github.com/UKGovernmentBEIS/inspect_ai",
+    "note": "Evaluation harnesses and reproducible tasks"
+  },
+  {
+    "id": "owasp",
+    "title": "OWASP LLM Top 10 (2026)",
+    "url": "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/",
+    "note": "Threat categories for applications using LLMs"
+  },
+  {
+    "id": "nist",
+    "title": "NIST Generative AI profile",
+    "url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
+    "note": "Generative AI risk and governance"
+  },
+  {
+    "id": "otel",
+    "title": "OpenTelemetry semantic conventions",
+    "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/",
+    "note": "Operational trace dimensions for AI workloads"
+  },
+  {
+    "id": "aider",
+    "title": "Aider",
+    "url": "https://github.com/Aider-AI/aider",
+    "note": "Code editing loop examples"
+  },
+  {
+    "id": "openhands",
+    "title": "OpenHands",
+    "url": "https://github.com/OpenHands/OpenHands",
+    "note": "Coding agent execution and sandbox examples"
+  },
+  {
+    "id": "lmstudio",
+    "title": "LM Studio docs",
+    "url": "https://lmstudio.ai/docs/app",
+    "note": "Graphical local-model workflow"
+  }
+]

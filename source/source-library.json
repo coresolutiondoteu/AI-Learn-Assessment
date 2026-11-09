@@ -1,0 +1,514 @@
+[
+  {
+    "id": "R01",
+    "title": "Google Machine Learning Crash Course",
+    "note": "Free ML foundation: training, loss, overfitting, embeddings, neural nets.",
+    "url": "https://developers.google.com/machine-learning/crash-course",
+    "category": "Foundation",
+    "page": 39
+  },
+  {
+    "id": "R02",
+    "title": "Hugging Face LLM Course",
+    "note": "Tokenization, transformer use, datasets, and Hugging Face ecosystem.",
+    "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
+    "category": "Foundation",
+    "page": 39
+  },
+  {
+    "id": "R03",
+    "title": "Hugging Face: text generation tutorial",
+    "note": "Prompt formatting, generation and chat templates.",
+    "url": "https://huggingface.co/docs/transformers/llm_tutorial",
+    "category": "Foundation",
+    "page": 39
+  },
+  {
+    "id": "R04",
+    "title": "Attention Is All You Need (paper)",
+    "note": "Original Transformer paper; read alongside worked diagrams.",
+    "url": "https://arxiv.org/abs/1706.03762",
+    "category": "Research",
+    "page": 39
+  },
+  {
+    "id": "R05",
+    "title": "Karpathy: makemore",
+    "note": "Small autoregressive language models you can understand in code.",
+    "url": "https://github.com/karpathy/makemore",
+    "category": "Foundation",
+    "page": 39
+  },
+  {
+    "id": "R06",
+    "title": "Karpathy: nanochat",
+    "note": "Minimal training-to-inference pipeline; advanced, GPU-intensive runs optional.",
+    "url": "https://github.com/karpathy/nanochat",
+    "category": "Research",
+    "page": 39
+  },
+  {
+    "id": "R07",
+    "title": "Ollama quickstart",
+    "note": "Install and run local models; learn local/cloud distinctions.",
+    "url": "https://docs.ollama.com/quickstart",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R08",
+    "title": "Ollama local API reference",
+    "note": "Request formats and timing fields for generation and chat.",
+    "url": "https://docs.ollama.com/api/introduction",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R09",
+    "title": "Ollama Qwen3 0.6B model page",
+    "note": "Small local practice model; quality is deliberately limited.",
+    "url": "https://ollama.com/library/qwen3:0.6b",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R10",
+    "title": "llama.cpp source repository",
+    "note": "C/C++ local inference engine and quantized GGUF ecosystem.",
+    "url": "https://github.com/ggml-org/llama.cpp",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R11",
+    "title": "llama.cpp server documentation",
+    "note": "Self-hosted endpoint and its operational options.",
+    "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R12",
+    "title": "vLLM documentation",
+    "note": "High-throughput serving, batching and KV-cache management.",
+    "url": "https://docs.vllm.ai/en/latest/",
+    "category": "Serving",
+    "page": 40
+  },
+  {
+    "id": "R13",
+    "title": "SGLang repository",
+    "note": "Advanced model serving, performance and execution optimization.",
+    "url": "https://github.com/sgl-project/sglang",
+    "category": "Serving",
+    "page": 40
+  },
+  {
+    "id": "R14",
+    "title": "LM Studio docs",
+    "note": "GUI-first local models and local OpenAI-compatible APIs.",
+    "url": "https://lmstudio.ai/docs/app",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R15",
+    "title": "Hugging Face Agents Course",
+    "note": "Free graduated course from basic tools to an agent benchmark.",
+    "url": "https://huggingface.co/learn/agents-course/unit0/introduction",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R16",
+    "title": "Anthropic: Building effective agents",
+    "note": "Workflow-versus-agent design and practical orchestration patterns.",
+    "url": "https://www.anthropic.com/research/building-effective-agents",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R17",
+    "title": "OpenAI: Building agents learning track",
+    "note": "Foundations, tool use, orchestration and guardrails.",
+    "url": "https://developers.openai.com/tracks/building-agents",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R18",
+    "title": "OpenAI Agents SDK documentation",
+    "note": "Example agent loops, tools, handoffs, tracing and human approval.",
+    "url": "https://developers.openai.com/api/docs/guides/agents/sdk",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R19",
+    "title": "OpenAI Agents SDK GitHub",
+    "note": "Inspect implementation and working examples.",
+    "url": "https://github.com/openai/openai-agents-python",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R20",
+    "title": "LangGraph overview",
+    "note": "State, control flow, checkpoints, long-running workflows.",
+    "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R21",
+    "title": "Pydantic AI repository",
+    "note": "Typed agents, validation and evaluation integration.",
+    "url": "https://github.com/pydantic/pydantic-ai",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R22",
+    "title": "Hugging Face smolagents",
+    "note": "Small, inspectable agent library with code-agent focus.",
+    "url": "https://github.com/huggingface/smolagents",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R23",
+    "title": "MCP specification (2026-07-28)",
+    "note": "Versioned protocol reference for hosts, clients, servers and messages.",
+    "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R24",
+    "title": "MCP architecture overview (2026-07-28)",
+    "note": "Host/client/server diagram, tools, resources, prompts and transports.",
+    "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R25",
+    "title": "MCP official Python SDK",
+    "note": "Implement local or remote MCP clients and servers.",
+    "url": "https://github.com/modelcontextprotocol/python-sdk",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R26",
+    "title": "MCP authorization security (2026-07-28)",
+    "note": "Audience binding, token handling and HTTP authorization security.",
+    "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization",
+    "category": "Security",
+    "page": 43
+  },
+  {
+    "id": "R27",
+    "title": "RAG from Scratch (LangChain)",
+    "note": "Hands-on notebooks for indexing, retrieval and grounded generation.",
+    "url": "https://github.com/langchain-ai/rag-from-scratch",
+    "category": "Retrieval",
+    "page": 43
+  },
+  {
+    "id": "R28",
+    "title": "Ragas evaluation framework",
+    "note": "RAG-specific tests and application evaluations; current org has changed.",
+    "url": "https://github.com/vibrantlabsai/ragas",
+    "category": "Retrieval",
+    "page": 43
+  },
+  {
+    "id": "R29",
+    "title": "Inspect AI (UK AISI)",
+    "note": "Open evaluation framework for model and agent tasks.",
+    "url": "https://github.com/UKGovernmentBEIS/inspect_ai",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R30",
+    "title": "EleutherAI lm-evaluation-harness",
+    "note": "Reproducible task-based model evaluations and backends.",
+    "url": "https://github.com/EleutherAI/lm-evaluation-harness",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R31",
+    "title": "OpenAI Cookbook: evaluation examples",
+    "note": "Practical evaluation and agent-improvement case studies.",
+    "url": "https://developers.openai.com/cookbook/topic/evals",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R32",
+    "title": "OpenAI Agents SDK observability guide",
+    "note": "Model calls, tool spans, handoffs and traces.",
+    "url": "https://developers.openai.com/api/docs/guides/agents/integrations-observability",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R33",
+    "title": "OpenTelemetry GenAI conventions",
+    "note": "Standardized telemetry concepts; check stability before adoption.",
+    "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R34",
+    "title": "OWASP Top 10 for LLM Applications 2026",
+    "note": "Current community threat taxonomy for LLM apps and agents.",
+    "url": "https://github.com/GenAI-Security-Project/GenAI-LLM-Top10",
+    "category": "Security",
+    "page": 44
+  },
+  {
+    "id": "R35",
+    "title": "NIST AI RMF: Generative AI Profile",
+    "note": "Risk governance, measurement and trustworthiness.",
+    "url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
+    "category": "Security",
+    "page": 44
+  },
+  {
+    "id": "R36",
+    "title": "OpenAI: guardrails and human review",
+    "note": "Apply automated checks and explicit approval to risky tool actions.",
+    "url": "https://developers.openai.com/api/docs/guides/agents/guardrails-approvals",
+    "category": "Security",
+    "page": 44
+  },
+  {
+    "id": "R37",
+    "title": "OpenAI Codex repository",
+    "note": "Study a local coding agent and its lifecycle.",
+    "url": "https://github.com/openai/codex",
+    "category": "Coding harnesses",
+    "page": 42
+  },
+  {
+    "id": "R38",
+    "title": "Aider repository",
+    "note": "Git-oriented terminal pair-programming, including local models.",
+    "url": "https://github.com/Aider-AI/aider",
+    "category": "Coding harnesses",
+    "page": 42
+  },
+  {
+    "id": "R39",
+    "title": "OpenHands repository",
+    "note": "Agentic software engineering and runtime isolation.",
+    "url": "https://github.com/OpenHands/OpenHands",
+    "category": "Coding harnesses",
+    "page": 42
+  },
+  {
+    "id": "R40",
+    "title": "Claude Code repository",
+    "note": "Another production coding harness design reference.",
+    "url": "https://github.com/anthropics/claude-code",
+    "category": "Coding harnesses",
+    "page": 42
+  },
+  {
+    "id": "R41",
+    "title": "OpenAI: practical guide to building agents",
+    "note": "Design and operational primer with 2026 examples.",
+    "url": "https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R42",
+    "title": "MCP specification release notes",
+    "note": "Explains why the July 2026 protocol changed.",
+    "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R43",
+    "title": "Hugging Face Agents Course repository",
+    "note": "Course source code and assignments.",
+    "url": "https://github.com/huggingface/agents-course",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R44",
+    "title": "Ollama API examples",
+    "note": "Official examples of structured output, tools and streaming.",
+    "url": "https://github.com/ollama/ollama/blob/main/docs/api.md",
+    "category": "Local inference",
+    "page": 40
+  },
+  {
+    "id": "R45",
+    "title": "Anthropic: architecture pattern guide",
+    "note": "Select single-agent, sequential or parallel patterns.",
+    "url": "https://claude.com/resources/guides/building-effective-ai-agents/common-architecture-patterns",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R46",
+    "title": "Hugging Face: chat templates",
+    "note": "Why role markers and token serialization must match model training.",
+    "url": "https://huggingface.co/docs/transformers/chat_templating",
+    "category": "Foundation",
+    "page": 38
+  },
+  {
+    "id": "R47",
+    "title": "Hugging Face: KV cache strategies",
+    "note": "Cache memory, decoding and cache implementation tradeoffs.",
+    "url": "https://huggingface.co/docs/transformers/kv_cache",
+    "category": "Serving",
+    "page": 40
+  },
+  {
+    "id": "R48",
+    "title": "Hugging Face: tokenization algorithms",
+    "note": "BPE, Unigram and WordPiece; representation compatibility.",
+    "url": "https://huggingface.co/docs/transformers/tokenizer_summary",
+    "category": "Foundation",
+    "page": 38
+  },
+  {
+    "id": "R49",
+    "title": "Hugging Face: PEFT / LoRA",
+    "note": "Parameter-efficient model adaptation and adapter tradeoffs.",
+    "url": "https://huggingface.co/docs/peft/quicktour",
+    "category": "Research",
+    "page": 39
+  },
+  {
+    "id": "R50",
+    "title": "Karpathy: micrograd",
+    "note": "Backpropagation and automatic differentiation in tiny readable code.",
+    "url": "https://github.com/karpathy/micrograd",
+    "category": "Foundation",
+    "page": 39
+  },
+  {
+    "id": "R51",
+    "title": "Karpathy: build-nanogpt",
+    "note": "Step-by-step implementation of a GPT language model.",
+    "url": "https://github.com/karpathy/build-nanogpt",
+    "category": "Research",
+    "page": 39
+  },
+  {
+    "id": "R52",
+    "title": "OpenAI: running agents",
+    "note": "Canonical model-tool loop and state continuation patterns.",
+    "url": "https://developers.openai.com/api/docs/guides/agents/running-agents",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R53",
+    "title": "A2A: Agent2Agent protocol specification",
+    "note": "Communication between independently operated agent applications.",
+    "url": "https://a2a-protocol.org/v1.0.0/specification",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R54",
+    "title": "Triton language and GPU kernels",
+    "note": "Understand lower-level accelerator tensor kernels and compiler tradeoffs.",
+    "url": "https://github.com/triton-lang/triton",
+    "category": "Research",
+    "page": 39
+  },
+  {
+    "id": "R55",
+    "title": "FlashAttention reference implementation",
+    "note": "Performance optimization through IO-aware attention kernels.",
+    "url": "https://github.com/Dao-AILab/flash-attention",
+    "category": "Research",
+    "page": 39
+  },
+  {
+    "id": "R56",
+    "title": "Hugging Face MCP Course",
+    "note": "Progressive introduction to MCP terminology and implementations.",
+    "url": "https://huggingface.co/learn/mcp-course",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R57",
+    "title": "MCP architecture guide (2026)",
+    "note": "Host/client/server roles, protocol layers and tool discovery.",
+    "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture",
+    "category": "Interoperability",
+    "page": 42
+  },
+  {
+    "id": "R58",
+    "title": "MCP authorization spec (2026)",
+    "note": "Authorization requirements and transport-specific security model.",
+    "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization",
+    "category": "Security",
+    "page": 43
+  },
+  {
+    "id": "R59",
+    "title": "Promptfoo tests and red teaming",
+    "note": "Task comparisons, regression tests and adversarial test suites.",
+    "url": "https://www.promptfoo.dev/docs/intro/",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R60",
+    "title": "smolagents: ReAct loop concepts",
+    "note": "Worked explanation of repeated model-tool-observation loops.",
+    "url": "https://github.com/huggingface/smolagents/blob/main/docs/source/en/conceptual_guides/react.md",
+    "category": "Agents",
+    "page": 41
+  },
+  {
+    "id": "R61",
+    "title": "OpenAI tiktoken",
+    "note": "Inspect concrete BPE tokenization implementations.",
+    "url": "https://github.com/openai/tiktoken",
+    "category": "Foundation",
+    "page": 39
+  },
+  {
+    "id": "R62",
+    "title": "vLLM OpenAI-compatible serving",
+    "note": "Serving contract and security caveats; APIs are not perfectly interchangeable.",
+    "url": "https://docs.vllm.ai/en/latest/serving/online_serving/openai_compatible_server/",
+    "category": "Serving",
+    "page": 40
+  },
+  {
+    "id": "R63",
+    "title": "Ragas metrics reference",
+    "note": "Grounding, retrieval accuracy and agent/tool evaluation metrics.",
+    "url": "https://docs.ragas.io/en/latest/concepts/metrics/available_metrics/",
+    "category": "Evaluation",
+    "page": 43
+  },
+  {
+    "id": "R64",
+    "title": "OpenHands: agent control-loop architecture",
+    "note": "A real model-tool-state-execution implementation and event flow.",
+    "url": "https://github.com/OpenHands/docs/blob/main/sdk/arch/agent.mdx",
+    "category": "Coding harnesses",
+    "page": 42
+  }
+]
