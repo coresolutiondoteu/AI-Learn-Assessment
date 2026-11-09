@@ -1,85 +1,155 @@
-# AI Systems Academy - Offline AI Engineering Learning & Assessment
+# AI Systems Academy
 
-**Version:** 2.0 · **Build date:** 2026-11-08 · **Language:** English · **Format:** self-contained offline HTML app + companion PDFs + editable sources
+**A self-paced course in AI systems engineering, with practical labs, guided architecture cases, and assessments. Runs locally in your browser.**
 
-Download the app: https://github.com/coresolutiondoteu/AI-Learn-Assessment/archive/refs/heads/main.zip
+AI Systems Academy connects the parts of an AI system that are usually taught in isolation: hardware and compute, model weights, tokenization, inference, context, agent harnesses, tools, retrieval, security, evaluation, and production operations.
 
-## Run it
+Use it to:
 
-1. Unzip the archive, preserving the `AI_Systems_Academy/` folder.
-2. Open **`index.html`** in a modern desktop browser. No installation, account, API keys, internet connection, running server, or external packages are needed to use the embedded training and assessments.
-3. Select **Begin module 1**. Learn the concept, examine the trace, record a safe lab, then open **Engineering clinic** to practice evidence-based decisions.
-4. Use **Assessment center** for the unscored learning challenge, topic exams, or full 20-, 30- and 40-question assessments. Use **My progress → Export progress JSON** to back up your work.
+- **Understand the stack.** Identify what each layer does, how components interact, and where responsibility and trust boundaries sit.
+- **Practice engineering decisions.** Follow request traces, work through controlled labs, and diagnose failures using observed evidence.
+- **Check your understanding.** Review terminology, complete module checkpoints, and take randomized assessments with explanations linked to the relevant material.
+- **Build evidence of competence.** Progress from foundational knowledge to architecture patterns, design trade-offs, and capstone projects.
 
-The local HTML app and PDF manuals are usable without internet. Links to official documentation, papers and repositories need internet access. Some browsers restrict storage when opening `file://` pages: export progress periodically and import it after changing browsers/paths.
+The application is an educational environment, **not** a model runner or infrastructure automation tool.
 
-## Check the video fly-through first
+## Why this exists
 
-[![Watch the video](https://img.youtube.com/vi/ZzmACDsid8E/hqdefault.jpg)](https://www.youtube.com/watch?v=ZzmACDsid8E)   
+Using an AI assistant is straightforward. Understanding what happens between a prompt and a result is not.
 
-## What is included
+Terms such as *model*, *tokenizer*, *runtime*, *kernel*, *agent*, *harness*, *TUI*, and *MCP* describe different parts of a larger system, yet are frequently conflated. A working demonstration rarely tells you which component made a decision, why performance changed, whether a tool call was authorized, or what would happen when something fails.
 
-| Component | Coverage |
-|---|---|
-| Connected learning modules | **10** competency domains, foundations to production engineering |
-| Core concept lessons | **60** lessons, now including an *Engineering lens* on failures, decisions, evidence and transfer |
-| Engineering clinics | **10** in-depth case studies with observed evidence, constraints, **30** stepwise decision exercises, feedback and proof targets |
-| Four-option assessment bank | **372** distinct questions: **120 Level 1**, **192 Level 2**, **60 Level 3** |
-| New question content | **120** scenario-driven questions (60 applied, 60 engineering-judgment); individually curated incorrect-option rationales and explanatory notes |
-| Lab/runbook guidance | 10 exercises, checklists and learner-entered evidence; **not** automatic external-system execution |
-| Architecture and capstone tools | Interactive L0-L9 stack, 11 architecture patterns, four capstones, 16-week path |
-| Vocabulary and references | 99 glossary entries with review scheduling; 64 annotated manual references and module reading links |
-| Companion manuals | 46-page **AI Systems Engineering Field Manual** and two-page **Opening Study Guide**, included unchanged |
+This project addresses that gap with a connected learning path. Concepts are introduced in dependency order, reinforced through vocabulary and examples, and revisited in scenarios where the learner must distinguish observations from assumptions and defend a technical choice.
 
-### How the deeper training works
+## Download and run
 
-Each module now connects a progression rather than only a reading passage:
+**[Download AI Systems Academy — ZIP of the `main` branch](https://github.com/coresolutiondoteu/AI-Learn-Assessment/archive/refs/heads/main.zip)**
 
-**Concept → Request trace → Hands-on lab → Engineering clinic → Knowledge checkpoint → Reflective review**
+1. Download the ZIP using the link above.
+2. Extract it to a folder of your choice. Keep the directory structure intact.
+3. Locate **`index.html`** in the extracted files (the packaged application places it in `AI_Systems_Academy/`) and open it in a modern browser.
+4. Choose **Begin module 1** to start learning. Open **Assessment center** when you want to practice or take a scored exam.
 
-The ten engineering clinics illustrate how a practitioner isolates evidence, diagnoses a failure boundary, and chooses an architecture under constraints. Each clinic has a coherent situation, measured signals or observations, safety/operational constraints, and three guided decisions. After each choice, the learner sees the best answer, its justification, and explanations for each alternative. Clinics and the guided challenge are **unscored learning**, not certifications.
+There is **nothing to install to use the academy**: no backend, database, account, API key, model download, package manager, or running web server is required. The training content, checks, and exams work offline. Links to external articles, official documentation, GitHub repositories, and videos require an internet connection.
 
-In the assessment bank, questions may include an engineering incident, a measurable before/after comparison, trace observations, or explicit constraints. New advanced alternatives are engineered as plausible competing decisions or diagnoses, rather than arbitrary wrong statements. A question's answer review explains both the choice and the relevant misconception, then links back to its concept or clinic.
+Your progress is stored in the browser when local-file storage is available. Use **My progress → Export progress JSON** to keep a backup, particularly before moving the files, changing browsers, or updating the application. You can restore it using **Import progress JSON**.
 
-## Three-level assessment contract
+## Video walkthrough
 
-| Level | Share of each scored exam | What it assesses | Example |
-|---|---:|---|---|
-| **1 — Foundations** | **30%** | Vocabulary, conceptual ownership, key distinctions, basic processes | Distinguish model, inference engine, harness and user interface |
-| **2 — Applied understanding** | **50%** | Interpret evidence, diagnose symptoms, compare mechanisms, follow a trace | Explain a drop in tool-selection accuracy when tool execution still succeeds |
-| **3 — Engineering judgment** | **20%** | Choose justified designs under constraints, handle security and uncertainty | Preserve fifty capabilities while designing scoped tool discovery and authorization |
+[![Watch the AI Systems Academy fly-through](https://img.youtube.com/vi/ZzmACDsid8E/hqdefault.jpg)](https://youtu.be/ZzmACDsid8E)
 
-The exam draws **6/10/4** questions at 20 items, **9/15/6** at 30, or **12/20/8** at 40. The full exam covers each of the ten modules equally: two, three, or four questions from each. A section exam contains 20 questions from that specific module with the same 6/10/4 allocation. Questions and the position of the correct alternative are randomized for each attempt.
+[Watch the application fly-through on YouTube](https://youtu.be/ZzmACDsid8E)
 
-**Pass threshold: 80%.** In a perfectly answered Level 1 + Level 2 attempt, the candidate has exactly 80%; reaching 100% necessarily requires getting Level 3 questions right. This **score architecture** is implemented and regression-tested. Whether 80% proves challenging and 100% exceptionally hard for real learners remains a **pilot-testing hypothesis**, not a proven psychometric claim. Scores are formative, not proctored, normed, or a professional certification.
+---
 
-The app keeps scored exam answers and hints hidden until submission, then shows **all** answer explanations (including correct responses), difficulty-level performance, misconceptions, and links to a matching clinic or lesson. The final item has an explicit **Submit exam** control instead of a disabled Next button.
+## What's included
 
-### Learning modes (not graded like the exam)
+| Area | Content |
+| --- | --- |
+| Guided curriculum | **10 progressive modules**, **60 linked lessons**, and an interactive **L0–L9 system stack** |
+| Practical learning | **10 lab runbooks**, with steps, safety constraints, and learner-recorded evidence |
+| Engineering clinics | **10 cases** covering **30 guided decisions** built around observations, diagnosis, and architectural choices |
+| Architecture | **11 reusable patterns**, **4 capstone projects**, and a **16-week study route** |
+| Terminology and references | **99 glossary entries** with review scheduling, plus **64 annotated references** in the field manual |
+| Assessment | **372 four-option questions** across foundations, application, and engineering judgment |
+| Documentation | An **AI Systems Engineering Field Manual**, an **Opening Study Guide**, and the assessment/clinic design notes |
 
-- **Guided learning challenge:** Ten cross-domain questions, balanced 3 × Level 1 / 5 × Level 2 / 2 × Level 3, with optional hints, immediate reasoning and alternative explanations.
-- **Module knowledge checkpoints:** Five questions drawn across levels (1 foundation, 3 applied, 1 judgment), followed by educational feedback; aim for 80%, but treat this as practice evidence.
-- **Engineering clinics:** Three stage-by-stage decisions per domain. Revisit an attempt or reset clinic responses without changing scored exam history.
+The material moves from basic computing and model concepts to local inference, context engineering, agent control loops, interfaces and MCP, RAG, evaluation, security, and production trade-offs. The PDF guides provide deeper reference material; the application connects it into shorter lessons and exercises.
 
-## Recommended route
+### How the learning experience works
 
-1. **Map:** Use the opening guide and the L0–L9 explorer to locate owners and trust boundaries.
-2. **Understand:** Work through the six lessons in a module; articulate inputs, outputs, failure modes and trade-offs.
-3. **Trace and build:** Follow the module's request trace, perform the lab safely on a non-production environment, and retain evidence outside the app where appropriate.
-4. **Reason:** Complete the three-stage engineering clinic *before* attempting a high-stakes style exam.
-5. **Check:** Take the five-question checkpoint. Inspect explanations even for correct responses, and review related vocabulary.
-6. **Assess:** Attempt an unscored guided challenge and a section exam. Move to the full exam after covering multiple domains.
-7. **Prove:** Complete a capstone with a reproducible test, negative cases, design rationale and evidence; a high quiz score alone is insufficient.
+Each module follows a consistent sequence:
 
-## Progress and privacy
+**Concept → Request trace → Lab → Engineering clinic → Knowledge checkpoint → Review**
 
-The app uses a browser-local storage record under the existing key **`ai-systems-academy-v1`**, deliberately preserving the v1/v1.1 storage schema and prior lesson/lab/vocabulary/exam progress. New engineering-clinic state is an optional `clinics` field; older exported records continue to import. Opening the app at a new local path or changing browsers may expose different browser-local storage. Export a progress JSON backup before upgrading or clearing browser data. An import **replaces** the current browser record with the chosen backup.
+A concept lesson explains what a component is, where it belongs, what it depends on, and what changes when it is replaced. The trace shows the component in an end-to-end request. The lab asks for a small, safe experiment and recorded observations. The clinic then presents a realistic situation with constraints and asks for three successive decisions:
 
-No login, tracking, remote collection, model calls, or external services are required for the app. Exported progress files can contain your learning history and notes: handle them as personal data. Do not paste secrets or actual credentials into lab evidence.
+1. **Observe:** What do the measurements establish, and what remains unknown?
+2. **Diagnose:** Which boundary or hypothesis should be tested next?
+3. **Decide:** Which approach best satisfies the constraints, and how would you verify it?
 
-## Editable source and maintenance
+Clinic feedback explains the preferred option and why the alternatives are less suitable in that situation. Clinics are **guided practice**, not scored exams or proof of professional proficiency.
 
-`index.html` is a standalone distributable generated from `source/template.html` plus JSON sources. To edit content and rebuild from the unpacked root:
+For a useful study cycle, complete the six lessons in a module, trace the example, perform the lab in a non-production environment, finish its clinic, take the checkpoint, and revisit any weak vocabulary before moving on.
+
+## Assessments
+
+The v2.0 question bank contains **372 distinct single-answer questions**, each with four choices. The difficulty levels separate recognition of terminology from applied diagnosis and engineering judgment.
+
+| Level | Questions in bank | Share of a scored exam | Focus |
+| --- | ---: | ---: | --- |
+| **L1 — Foundations** | 120 | 30% | Terminology, responsibilities, core concepts, and basic processes |
+| **L2 — Applied understanding** | 192 | 50% | Reading traces, interpreting measurements, diagnosing failures, and comparing mechanisms |
+| **L3 — Engineering judgment** | 60 | 20% | Choosing and defending designs under operational, security, and reliability constraints |
+
+### Exam formats
+
+| Exam | Questions | L1 / L2 / L3 | Coverage |
+| --- | ---: | --- | --- |
+| Section exam | 20 | 6 / 10 / 4 | One selected module |
+| Comprehensive | 20 | 6 / 10 / 4 | 2 questions from each module |
+| Comprehensive | 30 | 9 / 15 / 6 | 3 questions from each module |
+| Comprehensive | 40 | 12 / 20 / 8 | 4 questions from each module |
+
+**Passing score: 80%.** Question selection and answer order are randomized for each attempt. Scored exams withhold answers and hints until submission, then provide a full review of both correct and incorrect responses, difficulty-level results, and links back to relevant lessons or clinics.
+
+The academy also provides two unscored learning modes:
+
+- **Guided learning challenge:** 10 questions across all modules, with optional hints and immediate explanations.
+- **Module checkpoints:** 5 questions per attempt, with feedback for targeted practice.
+
+An exam score reflects performance on that attempt; it is **not a professional certification**. The difficulty mix is implemented and logic-tested, but the question bank has not been psychometrically calibrated against real learner cohorts. The original 252 questions are retained from the earlier version; the 120 newer scenario questions and clinic stages received additional editorial work. Independent item review and learner testing remain important next steps.
+
+## Study route
+
+A recommended progression is to:
+
+1. Map the full L0–L9 stack and explain the difference between the model, inference engine, harness, tools, and interface.
+2. Learn tokenization, model behavior, prefill/decode, memory, quantization, and local serving.
+3. Understand prompt and context assembly, tool contracts, bounded agent loops, and MCP boundaries.
+4. Build and evaluate a small retrieval workflow with citations and access controls.
+5. Investigate failure modes, prompt injection, state recovery, permissions, and production reliability.
+6. Complete a capstone with reproducible tests, negative cases, a design decision record, and evidence of what actually worked.
+
+The included **16-week plan** organizes these topics into weekly deliverables. The four capstones cover a local evidence assistant, a bounded tool agent with MCP, an evaluation-driven coding harness, and inference/agent performance engineering.
+
+## Offline operation, privacy, and progress
+
+The application runs entirely in the browser and does not require accounts, telemetry collection, external model calls, or a remote service. Learning history and notes are kept in browser-local storage, using the existing `ai-systems-academy-v1` storage key for compatibility with earlier releases. Engineering-clinic progress is stored as an additional optional field.
+
+Some browsers restrict storage for `file://` pages; progress may also appear separate after changing the file path or browser. **Export progress before upgrading.** Importing a backup replaces the current browser record. Export files contain learning history and any notes you entered, so keep them private and do not place credentials or sensitive production data in lab records.
+
+## Repository layout
+
+The application distribution has the following structure:
+
+```text
+AI_Systems_Academy/
+├── index.html                         # Standalone application
+├── docs/
+│   ├── AI_Systems_Field_Manual.pdf
+│   ├── Opening_Study_Guide.pdf
+│   └── ASSESSMENT_AND_CLINIC_DESIGN.md
+├── source/
+│   ├── template.html                  # HTML application source
+│   ├── rebuild.py                     # Assemble standalone index.html
+│   ├── modules.json                   # Lessons and modules
+│   ├── question-bank.json             # Original assessment items
+│   ├── scenario-questions.json        # Additional L2/L3 items
+│   ├── engineering-clinics.json       # Engineering cases and decisions
+│   └── ...                            # Glossary, patterns, references, study plan
+├── tests/
+│   ├── validate_content.py
+│   └── assessment_flow.cjs
+├── CHANGELOG.md
+└── SHA256SUMS.txt
+```
+
+`index.html` is the standalone runtime. The `source/` files are provided for inspection, maintenance, and rebuilding; they are **not** needed when simply using the app.
+
+### Edit and rebuild
+
+From the unpacked `AI_Systems_Academy/` directory:
 
 ```sh
 python3 source/rebuild.py
@@ -87,27 +157,16 @@ python3 tests/validate_content.py
 node tests/assessment_flow.cjs
 ```
 
-Python 3 standard library is sufficient for **building**. Node.js is optional, needed only for the JS regression tests. To edit the new expanded content, edit `source/scenario-questions.json` and `source/engineering-clinics.json` directly; existing questions live in `source/question-bank.json`, lessons in `source/modules.json`. The remaining JSON files cover vocabulary, references, patterns, capstones and the study plan. Keep stable IDs for previous question/lesson references and learner-progress continuity.
+Python 3's standard library is sufficient to rebuild the application. Node.js is only required for the JavaScript regression suite, not for running the academy.
 
-The `source/expand_content.py`, `source/refine_question_bank.py`, `source/refine_level2.py`, `source/refine_level3.py`, and `source/build_clinics.py` are **authoring/regeneration scripts**, not browser runtime dependencies. These scripts may replace curated JSON: do not rerun them after manual editing unless that regeneration is intended. `source/patch_app_v2.py` documents the one-time v1.1→v2 migration of the HTML template and is **not** part of the normal build.
+Edit `source/modules.json` for lessons, `source/question-bank.json` and `source/scenario-questions.json` for assessments, and `source/engineering-clinics.json` for clinic content. Keep lesson and question identifiers stable to preserve learner-progress references.
 
-See **`docs/ASSESSMENT_AND_CLINIC_DESIGN.md`** for the item-writing rubric, calibration plan, and remaining limitations. `SHA256SUMS.txt` provides checksums for the unpacked deliverable.
+The authoring scripts (`expand_content.py`, `refine_question_bank.py`, `refine_level2.py`, `refine_level3.py`, and `build_clinics.py`) can regenerate curated content. Do **not** rerun them after hand-editing JSON unless you intend to overwrite those edits. `patch_app_v2.py` is historical migration code, not a normal build step.
 
-## Safety, scope, and testing status
+See [`docs/ASSESSMENT_AND_CLINIC_DESIGN.md`](docs/ASSESSMENT_AND_CLINIC_DESIGN.md) for the assessment rubric and planned independent review, and [`CHANGELOG.md`](CHANGELOG.md) for release history.
 
-The academy does **not** execute tools, start local inference, run a model, deploy infrastructure, or enforce production security. It explains and asks you to verify such operations in a controlled environment. No part of the assessment is a substitute for live system testing, credential management, authorization checks, or expert review. The manuals' links and release references were compiled for 2026-11-08; verify them before operational use.
+## Scope and validation
 
-**Validated for this build:** source JSON/schema, all 372 questions, uniqueness and answer mapping, per-domain three-level supply, 30/50/20 question sampling, domain balance, scoring boundaries, result breakdown, HTML/JS compilation, legacy-progress load, 10 engineering clinics and offline Node-based logic regressions. **Not validated in a real graphical browser:** visual presentation, mobile behavior, keyboard/accessibility and full browser interaction, because managed-browser policy blocked the headless-browser test in the build environment. Review locally before any public launch.
+This is a learning tool. It does not execute model-proposed commands, launch an inference server, access external systems, enforce authorization, or make production changes. Labs describe work for a learner to perform deliberately in an appropriate test environment.
 
-## Package layout
-
-- `index.html` — standalone HTML academy app
-- `docs/AI_Systems_Field_Manual.pdf` — original 46-page companion reference
-- `docs/Opening_Study_Guide.pdf` — original two-page reading guide
-- `docs/ASSESSMENT_AND_CLINIC_DESIGN.md` — pedagogy and item-quality/calibration plan
-- `source/*.json` — editable content
-- `source/template.html` / `source/rebuild.py` — offline app source and build
-- `source/*.py` — optional authoring/migration scripts
-- `tests/` — offline source and regression tests
-- `CHANGELOG.md` — version history
-- `SHA256SUMS.txt` — file-by-file integrity evidence
+For the v2.0 archive, content validation and offline JavaScript logic tests cover the 372 questions, distinct answer choices, domain/difficulty sampling, scoring, progress compatibility, clinic navigation/state, and the exam submission flow. **Graphical browser behavior, responsive layout, keyboard accessibility, and real-world assessment difficulty have not been independently validated for this version.** Those require separate browser testing and learner review.
