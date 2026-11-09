@@ -14,7 +14,7 @@ Download the app: https://github.com/coresolutiondoteu/AI-Learn-Assessment/archi
 The local HTML app and PDF manuals are usable without internet. Links to official documentation, papers and repositories need internet access. Some browsers restrict storage when opening `file://` pages: export progress periodically and import it after changing browsers/paths.
 
 ## Check the video fly-through first 
-[![Watch the video](https://i9.ytimg.com/vi/ZzmACDsid8E/mqdefault.jpg?v=6af189c9&sqp=CLiSxtcG&rs=AOn4CLD-HqzlFBJwMllpVeXCyls07vDGMw)](https://www.youtube.com/watch?v=ZzmACDsid8E)
+[![Watch the video](https://img.youtube.com/vi/ZzmACDsid8E/hqdefault.jpg)](https://www.youtube.com/watch?v=ZzmACDsid8E)
 
 ## What is included
 
