@@ -1,4 +1,4 @@
-# AI Systems Academy — Offline AI Engineering Learning & Assessment
+# AI Systems Academy - Offline AI Engineering Learning & Assessment
 
 **Version:** 2.0 · **Build date:** 2026-11-08 · **Language:** English · **Format:** self-contained offline HTML app + companion PDFs + editable sources
 
